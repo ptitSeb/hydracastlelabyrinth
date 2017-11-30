@@ -51,7 +51,7 @@ void Input_KeyEvent(SDL_Event* evt)
         case SDLK_DOWN:     bDown = w; break;
         case SDLK_LEFT:     bLeft = w; break;
         case SDLK_RIGHT:    bRight = w; break;
-#ifdef PANDORA
+#if defined(PANDORA) || defined(PYRA)
         case SDLK_PAGEUP:   bFaceUp = w; break;
         case SDLK_PAGEDOWN: bFaceDown = w; break;
         case SDLK_END:      bFaceLeft = w; break;   // reversing, so (B) is sword
@@ -59,7 +59,16 @@ void Input_KeyEvent(SDL_Event* evt)
         case SDLK_RCTRL:    bR = w; break;
         case SDLK_RSHIFT:   bL = w; break;
         case SDLK_LCTRL:    bSelect = w; break;
-        case SDLK_LALT:     bStart = w; break;
+		case SDLK_LALT:     bStart = w; break;
+#elif defined(CHIP)
+		case SDLK_MINUS:        bFaceUp = w; break;
+		case SDLK_o:            bFaceDown = w; break;
+		case SDLK_0:            bFaceLeft = w; break;
+		case SDLK_EQUALS:       bFaceRight = w; break;
+		case SDLK_1:            bR = w; break;
+		case SDLK_2:            bL = w; break;
+		case SDLK_SPACE:        bSelect = w; break;
+		case SDLK_RETURN:       bStart = w; break;
 #else
         case SDLK_e:        bFaceUp = w; break;
         case SDLK_x:        bFaceDown = w; break;

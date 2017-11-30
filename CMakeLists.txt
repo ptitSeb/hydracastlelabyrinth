@@ -1,9 +1,18 @@
 cmake_minimum_required(VERSION 2.8)
 
 option(PANDORA "Set to ON if targeting an OpenPandora device" ${PANDORA})
+option(PYRA "Set to ON if targeting an DragonBox Pyra device" ${PANDORA})
+option(CHIP "Set to ON if targeting an PocketCHIP device" ${PANDORA})
+
 
 if(PANDORA)
-	add_definitions(-DPANDORA -DARM -DNEON)
+	add_definitions(-DPANDORA)
+endif()
+if(PYRA)
+	add_definitions(-DPYRA)
+endif()
+if(CHIP)
+	add_definitions(-DCHIP)
 endif()
 
 #create a _SDL2 later?

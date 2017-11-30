@@ -39,12 +39,18 @@ int main(int argc, char **argv)
 		osSetSpeedupEnable(false);
 	#endif
 	#ifdef _SDL
-	#ifdef PANDORA
+	#if defined(PANDORA) || defined(PYRA) || defined(CHIP)
 	wantFullscreen = 1;
 	#else
 	wantFullscreen = 0;
 	#endif
+	#ifdef CHIP
+	screenScale = 1;
+	#elif defined(PYRA)
+	screenScale = 3;
+	#else
 	screenScale = 2;
+	#endif
 	useJoystick = 1;
 	// get command line arguments
 	for (int i=1; i<argc; i++)

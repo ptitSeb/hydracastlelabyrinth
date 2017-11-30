@@ -1,0 +1,70 @@
+#include "audio.h"
+#include <SDL/SDL.h>
+
+void PHL_AudioInit()
+{
+    SDL_InitSubSystem(SDL_INIT_AUDIO);
+    Mix_Init(0);
+    Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
+}
+
+void PHL_AudioClose()
+{
+    Mix_CloseAudio();
+    Mix_Quit();
+}
+
+//Same as PHL_LoadSound, but expects a file name without extension
+PHL_Music PHL_LoadMusic(char* fname, int loop)
+{
+    PHL_Music ret;
+    ret.loop = loop;
+    char buff[4096];
+    strcpy(buff, "data/");
+    strcat(buff, fname);
+    strcat(buff, ".mid");
+    ret.snd = Mix_LoadMUS(buff);
+    return ret;
+}
+
+PHL_Sound PHL_LoadSound(char* fname)
+{
+    char buff[4096];
+    strcpy(buff, "data/");
+    strcat(buff, fname);
+    return Mix_LoadWAV(buff);
+}
+
+
+void PHL_PlayMusic(PHL_Music snd)
+{
+    if(snd.snd)
+        Mix_PlayMusic(snd.snd, snd.loop?-1:0);
+}
+
+void PHL_PlaySound(PHL_Sound snd, int channel)
+{
+    Mix_PlayChannel(channel, snd, 0);
+}
+
+void PHL_StopMusic()
+{
+    Mix_HaltMusic();
+}
+
+void PHL_StopSound(PHL_Sound snd, int channel)
+{
+    Mix_HaltChannel(channel);
+}
+
+void PHL_FreeMusic(PHL_Music snd)
+{
+    if(snd.snd)
+        Mix_FreeMusic(snd.snd);
+    snd.snd = NULL;
+}
+
+void PHL_FreeSound(PHL_Sound snd)
+{
+    Mix_FreeChunk(snd);
+}

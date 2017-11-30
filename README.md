@@ -1,5 +1,6 @@
-Hydra Castle Labyrinth
-===
+# Hydra Castle Labyrinth
+
+![HCL build status](https://api.travis-ci.org/ptitSeb/hydracastlelabyrinth.png "HCL build status")
 
 This version of Hydra Castle Labyrinth is based on the 3DS port (see below for original notice)
 
@@ -7,8 +8,10 @@ This vertsion use SDL (1.2) and build on Linux & OpenPandora.
 
 You'll need SDL 1.2 and SDL_mixer to build
 
-Original Notice
----
+![sreenshot on Pandora](screenshot.png "screenshot on Pandora")
+
+# Original Notice
+
 
 
 **This work has been done by an anon from /hbg/ on 4chan.org/vg/ and not me!**

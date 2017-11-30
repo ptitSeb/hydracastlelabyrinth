@@ -1,0 +1,16 @@
+language: cpp
+sudo: true
+dist: trusty
+addons:
+  apt:
+    packages:
+    - libsdl2-dev
+    - libsdl2-mixer-dev
+
+compiler:
+    - g++
+
+#Build steps
+script:
+    - cmake .
+    - make

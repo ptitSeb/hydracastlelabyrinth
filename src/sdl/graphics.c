@@ -8,6 +8,8 @@ SDL_Surface* screen = NULL;
 SDL_Surface* drawbuffer = NULL;
 SDL_Surface* backbuffer = NULL;
 
+static uint32_t tframe;
+
 SDL_Color PHL_NewRGB(uint8_t r, uint8_t g, uint8_t b)
 {
     SDL_Color ret = {.r = r, .b = b, .g = g};
@@ -26,11 +28,12 @@ void PHL_GraphicsInit()
     
     uint32_t flags = SDL_HWSURFACE|SDL_DOUBLEBUF;
     #ifdef PANDORA
-    flags |= SDL_FULLSCREEEN;
+    flags |= SDL_FULLSCREEN;
     #endif
     screen = SDL_SetVideoMode(640, 480, 0, flags);
     drawbuffer = screen;
-    backbuffer = PHL_NewSurface(640, 480);
+	backbuffer = PHL_NewSurface(640, 480);
+	tframe = SDL_GetTicks();
 }
 
 void PHL_GraphicsExit()
@@ -39,16 +42,15 @@ void PHL_GraphicsExit()
 	SDL_Quit();    
 }
 
-static uint32_t tframe;
 void PHL_StartDrawing()
 {
-    tframe = SDL_GetTicks() + 1000/60;
 	PHL_ResetDrawbuffer();
 }
 void PHL_EndDrawing()
 {
     SDL_Flip(screen);
-    while(SDL_GetTicks()<tframe)
+	uint32_t tnext = tframe + 1000/60;
+	while((tframe = SDL_GetTicks())<tnext)
         SDL_Delay(10);
 }
 

@@ -4,7 +4,7 @@
 
 This version of Hydra Castle Labyrinth is based on the 3DS port (see below for original notice)
 
-This vertsion use SDL (1.2) and build on Linux & OpenPandora.
+This version use SDL (1.2) and build on Linux & OpenPandora.
 
 You'll need SDL 1.2 and SDL_mixer to build
 

@@ -62,8 +62,7 @@ int screenX = 5,
 
 #ifdef _SDL
 char savename[4096];
-#else
-#define savename "data/save.tmp"
+char savemap[4096];
 #endif
 
 void game()
@@ -74,9 +73,12 @@ void game()
 	{
 		strcpy(savename, home);
 		strcat(savename, "/.hydracastlelabyrinth/");
+		strcpy(savemap, savename);
 		strcat(savename, "save.tmp");
+		strcat(savemap, "save.map");
 	} else {
 		strcpy(savename, "data/save.tmp");
+		strcpy(savemap, savemap);
 	}
 #endif
 	//Setup services
@@ -109,8 +111,8 @@ void game()
 			{
 				if (fileExists(savename) == 1) {
 					loadSave(savename);
-				}else if (fileExists("map/018.map") == 1) {
-					loadSave("map/018.map");					
+				}else if (fileExists(savemap) == 1) {
+					loadSave(savemap);					
 				}
 			}
 			
@@ -635,7 +637,7 @@ void saveScreen()
 		PHL_EndDrawing();
 	}
 	
-	if (writeSave("map/018.map") == 1)
+	if (writeSave(savemap) == 1)
 	{
 		if (fileExists(savename))
 		{
@@ -1405,7 +1407,7 @@ int writeSave(char* fname)
 	//mkdir("data");
 	FILE* f;
 	
-	char fullPath[128];
+	char fullPath[4096];
 	strcpy(fullPath, "");
 	#ifdef _3DS
 		strcat(fullPath, "sdmc:/3ds/appdata/HydraCastleLabyrinth/");
@@ -1477,7 +1479,6 @@ int writeSave(char* fname)
 		result = 1;
 		fclose(f);
 	}
-	
 	
 	return result;
 }

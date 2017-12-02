@@ -6,12 +6,6 @@
 int tempsave = 0;
 int cursor = 0;
 
-#ifdef _SDL
-extern char savename[4096];
-#else
-#define savename "data/save.tmp"
-#endif
-
 void titleScreenSetup();
 
 int titleScreenStep();
@@ -54,7 +48,7 @@ void titleScreenSetup()
 	cursor = 0;
 	
 	//Move cursor if save file exists
-	if ( fileExists("map/018.map") ) {
+	if ( fileExists(savemap) ) {
 		cursor = 1;
 	}	
 	

@@ -177,6 +177,15 @@ Platform* platforms[MAX_PLATFORMS];
 #define sndWater01 41
 #define sndWolf01 42
 
+#ifdef _SDL
+extern char savename[4096];
+extern char savemap[4096];
+#else
+#define savename "data/save.tmp"
+#define savemap "map/018.map"
+#endif
+
+
 void loadResources();
 void freeResources();
 

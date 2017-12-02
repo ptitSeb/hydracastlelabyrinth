@@ -13,6 +13,9 @@ int screenScale = 2;
 
 static uint32_t tframe;
 
+extern void Input_InitJoystick();
+extern void Input_CloseJoystick();
+
 SDL_Color PHL_NewRGB(uint8_t r, uint8_t g, uint8_t b)
 {
     SDL_Color ret = {.r = r, .b = b, .g = g};
@@ -21,13 +24,15 @@ SDL_Color PHL_NewRGB(uint8_t r, uint8_t g, uint8_t b)
 
 void PHL_GraphicsInit()
 {
-	if ( SDL_Init(SDL_INIT_VIDEO) < 0) {
+	if ( SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK ) < 0) {
 		fprintf(stderr, "Error");
 		SDL_Delay(5000);
 		exit(EXIT_FAILURE);
 	}
 	
 	SDL_ShowCursor(SDL_DISABLE);
+
+	Input_InitJoystick();
     
     uint32_t flags = SDL_HWSURFACE|SDL_DOUBLEBUF;
 	if(wantFullscreen)
@@ -40,6 +45,7 @@ void PHL_GraphicsInit()
 
 void PHL_GraphicsExit()
 {
+	Input_CloseJoystick();
     SDL_FreeSurface(backbuffer);
 	SDL_Quit();    
 }

@@ -15,6 +15,7 @@ extern Button btnL, btnR;
 extern Button btnStart, btnSelect;
 extern Button btnAccept, btnDecline;
 extern int axisX, axisY;
+extern int useJoystick;
 
 void PHL_ScanInput();
 

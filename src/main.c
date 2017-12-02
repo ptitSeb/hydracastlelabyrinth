@@ -45,6 +45,7 @@ int main(int argc, char **argv)
 	wantFullscreen = 0;
 	#endif
 	screenScale = 2;
+	useJoystick = 1;
 	// get command line arguments
 	for (int i=1; i<argc; i++)
 	{
@@ -60,8 +61,16 @@ int main(int argc, char **argv)
 			screenScale = 3;
 		if(!strcmp(argv[i], "-x4"))
 			screenScale = 4;
+		if(!strcmp(argv[i], "-j"))
+			useJoystick = 0;
+		if(!strcmp(argv[i], "--nojoy"))
+			useJoystick = 0;
+		if(!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help")) {
+			printf("Quick help\n\t-f|--fullscreen\tUse fullscreen\n\t-x1|-x2|-x3|-x4\tUse screenScale of *1..*4 (default *2 = 640x480)\n\t-j|-nojoy\tdo not use Joystick\n");
+			exit(0);
+		}
 	}
-	printf("Hydra Caslte Labyrinth, %s scale=x%d\n", wantFullscreen?"Fullscreen":"Windowed", screenScale);
+	printf("Hydra Caslte Labyrinth, %s scale=x%d, using Joystick=%d\n", wantFullscreen?"Fullscreen":"Windowed", screenScale, useJoystick);
 	#endif
 	
 	srand(time(NULL));

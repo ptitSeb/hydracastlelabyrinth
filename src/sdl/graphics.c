@@ -8,6 +8,9 @@ SDL_Surface* screen = NULL;
 SDL_Surface* drawbuffer = NULL;
 SDL_Surface* backbuffer = NULL;
 
+int wantFullscreen = 0;
+int screenScale = 2;
+
 static uint32_t tframe;
 
 SDL_Color PHL_NewRGB(uint8_t r, uint8_t g, uint8_t b)
@@ -27,12 +30,11 @@ void PHL_GraphicsInit()
 	SDL_ShowCursor(SDL_DISABLE);
     
     uint32_t flags = SDL_HWSURFACE|SDL_DOUBLEBUF;
-    #ifdef PANDORA
-    flags |= SDL_FULLSCREEN;
-    #endif
-    screen = SDL_SetVideoMode(640, 480, 0, flags);
+	if(wantFullscreen)
+    	flags |= SDL_FULLSCREEN;
+    screen = SDL_SetVideoMode(320*screenScale, 240*screenScale, 0, flags);
     drawbuffer = screen;
-	backbuffer = PHL_NewSurface(640, 480);
+	backbuffer = PHL_NewSurface(320*screenScale, 240*screenScale);
 	tframe = SDL_GetTicks();
 }
 
@@ -103,7 +105,7 @@ PHL_Surface PHL_LoadBMP(int index)
 		memcpy(&w, &QDAFile[18], 2);
 		memcpy(&h, &QDAFile[22], 2);
 		
-        surf = PHL_NewSurface(w * 2, h * 2);
+        surf = PHL_NewSurface(w * screenScale, h * screenScale);
 		//surf = PHL_NewSurface(200, 200);
 
 		//Load Palette
@@ -137,7 +139,7 @@ PHL_Surface PHL_LoadBMP(int index)
 				PHL_RGB c = palette[px][py];
 				
 				//PHL_DrawRect(dx * 2, dy * 2, 2, 2, c);
-				SDL_Rect rect = {dx * 2, (h-1-dy) * 2, 2, 2};	
+				SDL_Rect rect = {dx * screenScale, (h-1-dy) * screenScale, screenScale, screenScale};	
 				SDL_FillRect(surf, &rect, SDL_MapRGB(surf->format, c.r, c.g, c.b));
 			}
 		}
@@ -149,7 +151,7 @@ PHL_Surface PHL_LoadBMP(int index)
 
 void PHL_DrawRect(int x, int y, int w, int h, SDL_Color col)
 {
-	SDL_Rect rect = {x, y, w, h};
+	SDL_Rect rect = {x*screenScale/2, y*screenScale/2, w*screenScale/2, h*screenScale/2};
 	
 	SDL_FillRect(drawbuffer, &rect, SDL_MapRGB(drawbuffer->format, col.r, col.g, col.b));
 }
@@ -166,8 +168,8 @@ void PHL_DrawSurface(double x, double y, PHL_Surface surface)
 	}
 	
 	SDL_Rect offset;
-	offset.x = x;
-	offset.y = y;
+	offset.x = x*screenScale/2;
+	offset.y = y*screenScale/2;
 	
 	SDL_BlitSurface(surface, NULL, drawbuffer, &offset);
 }
@@ -176,20 +178,20 @@ void PHL_DrawSurfacePart(double x, double y, int cropx, int cropy, int cropw, in
 	if (quakeTimer > 0) {
 		int val = quakeTimer % 4;
 		if (val == 0) {
-			y -= 1;
+			y -= (screenScale==1)?2:1;
 		}else if (val == 2) {
-			y += 1;
+			y += (screenScale==1)?2:1;
 		}
 	}
 	
 	SDL_Rect crop, offset;
-	crop.x = cropx;
-	crop.y = cropy;
-	crop.w = cropw;
-	crop.h = croph;
+	crop.x = cropx*screenScale/2;
+	crop.y = cropy*screenScale/2;
+	crop.w = cropw*screenScale/2;
+	crop.h = croph*screenScale/2;
 	
-	offset.x = x;
-	offset.y = y;
+	offset.x = x*screenScale/2;
+	offset.y = y*screenScale/2;
 	
 	SDL_BlitSurface(surface, &crop, drawbuffer, &offset);
 }
@@ -203,7 +205,7 @@ void PHL_UpdateBackground(PHL_Background back, PHL_Background fore)
 	PHL_SetDrawbuffer(backbuffer);
 	
 	int xx, yy;
-	
+
 	for (yy = 0; yy < 12; yy++)
 	{
 		for (xx = 0; xx < 16; xx++)

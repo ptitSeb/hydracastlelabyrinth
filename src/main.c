@@ -38,6 +38,31 @@ int main(int argc, char **argv)
 		sdmcInit();
 		osSetSpeedupEnable(false);
 	#endif
+	#ifdef _SDL
+	#ifdef PANDORA
+	wantFullscreen = 1;
+	#else
+	wantFullscreen = 0;
+	#endif
+	screenScale = 2;
+	// get command line arguments
+	for (int i=1; i<argc; i++)
+	{
+		if(!strcmp(argv[i], "-f"))
+			wantFullscreen = 1;
+		if(!strcmp(argv[i], "--fullscreen"))
+			wantFullscreen = 1;
+		if(!strcmp(argv[i], "-x1"))
+			screenScale = 1;
+		if(!strcmp(argv[i], "-x2"))
+			screenScale = 2;
+		if(!strcmp(argv[i], "-x3"))
+			screenScale = 3;
+		if(!strcmp(argv[i], "-x4"))
+			screenScale = 4;
+	}
+	printf("Hydra Caslte Labyrinth, %s scale=x%d\n", wantFullscreen?"Fullscreen":"Windowed", screenScale);
+	#endif
 	
 	srand(time(NULL));
 	createSaveLocations();

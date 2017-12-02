@@ -89,7 +89,7 @@ void loadText()
 		//Load saving message		
 		loadMessage(saving, f);
 		
-		printf("\n%d", saving->length);
+		//printf("\n%d", saving->length);
 		
 		//Load save error message
 		int i;

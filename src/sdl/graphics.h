@@ -27,6 +27,9 @@ typedef struct {
 */
 extern PHL_Surface screen;
 
+extern int wantFullscreen;
+extern int screenScale;
+
 SDL_Color PHL_NewRGB(uint8_t r, uint8_t g, uint8_t b);
 /*
 {

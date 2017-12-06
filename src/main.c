@@ -3,6 +3,10 @@
 #include <stdlib.h>
 #include <time.h>
 #include <sys/stat.h>
+#ifdef ODROID
+#define _XTYPEDEF_MASK
+#include <X11/Xlib.h>
+#endif
 
 void createSaveLocations()
 {	
@@ -39,7 +43,7 @@ int main(int argc, char **argv)
 		osSetSpeedupEnable(false);
 	#endif
 	#ifdef _SDL
-	#if defined(PANDORA) || defined(PYRA) || defined(CHIP)
+	#if defined(PANDORA) || defined(PYRA) || defined(CHIP) || defined(ODROID)
 	wantFullscreen = 1;
 	#else
 	wantFullscreen = 0;
@@ -48,6 +52,18 @@ int main(int argc, char **argv)
 	screenScale = 1;
 	#elif defined(PYRA)
 	screenScale = 3;
+	#elif defined(ODROID)
+	Display* disp = XOpenDisplay(NULL);
+	Screen* scrn = DefaultScreenOfDisplay(disp);
+	int maxy = scrn->height;
+	if(maxy < 640)
+		screenScale = 1;
+	else if (maxy < 720)
+		screenScale = 2;
+	else if (maxy < 960)
+		screenScale = 3;
+	else
+		screenScale = 4;
 	#else
 	screenScale = 2;
 	#endif

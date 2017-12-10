@@ -8,6 +8,25 @@ This version use SDL (1.2) and build on Linux & OpenPandora.
 
 You'll need SDL 1.2 and SDL_mixer to build
 
+On Debian and friend, to prepare and build, you can do (if you never build anything before, start with `sudo apt install build-essential git`):
+```
+sudo apt install libsdl-dev libsdl-mixer1.2-dev cmake
+cd ~
+git clone https://github.com/ptitSeb/hydracastlelabyrinth.git
+cd hydracastlelabyrinth
+cmake .
+make
+```
+To hear music, you need timidity
+```
+sudo apt install timidity
+```
+And launch the game with
+```
+./hcl
+```
+To start windowed 640x480 game. You can have fullscreen with `./hcl -f`.
+
 ![sreenshot on Pandora](screenshot.png "screenshot on Pandora")
 
 # Original Notice

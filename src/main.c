@@ -67,8 +67,10 @@ int main(int argc, char **argv)
 		screenScale = 2;
 	else if (maxy < 960)
 		screenScale = 3;
-	else
+	else if (maxy < 1200)
 		screenScale = 4;
+	else
+		screenScale = 5;
 	#else
 	screenScale = 2;
 	#endif
@@ -88,6 +90,8 @@ int main(int argc, char **argv)
 			screenScale = 3;
 		if(!strcmp(argv[i], "-x4"))
 			screenScale = 4;
+		if(!strcmp(argv[i], "-x5"))
+			screenScale = 5;
 		if(!strcmp(argv[i], "-j"))
 			useJoystick = 0;
 		if(!strcmp(argv[i], "--nojoy"))

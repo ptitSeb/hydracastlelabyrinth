@@ -17,7 +17,6 @@ if(CHIP)
 endif()
 if(ODROID)
 	add_definitions(-DODROID)
-	set (EXTRA_LIBS ${EXTRA_LIBS} X11)
 endif()
 #create a _SDL2 later?
 add_definitions(-D_SDL)

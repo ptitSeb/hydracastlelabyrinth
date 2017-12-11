@@ -43,6 +43,12 @@ int main(int argc, char **argv)
 		osSetSpeedupEnable(false);
 	#endif
 	#ifdef _SDL
+	if ( SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK ) < 0) {
+		fprintf(stderr, "Error");
+		SDL_Delay(5000);
+		exit(EXIT_FAILURE);
+	}
+	
 	#if defined(PANDORA) || defined(PYRA) || defined(CHIP) || defined(ODROID)
 	wantFullscreen = 1;
 	#else
@@ -53,9 +59,8 @@ int main(int argc, char **argv)
 	#elif defined(PYRA)
 	screenScale = 3;
 	#elif defined(ODROID)
-	Display* disp = XOpenDisplay(NULL);
-	Screen* scrn = DefaultScreenOfDisplay(disp);
-	int maxy = scrn->height;
+	const SDL_VideoInfo* infos = SDL_GetVideoInfo();
+	int maxy = infos->current_h;
 	if(maxy < 640)
 		screenScale = 1;
 	else if (maxy < 720)
@@ -64,7 +69,6 @@ int main(int argc, char **argv)
 		screenScale = 3;
 	else
 		screenScale = 4;
-	XCloseDisplay(disp);
 	#else
 	screenScale = 2;
 	#endif

@@ -24,12 +24,6 @@ SDL_Color PHL_NewRGB(uint8_t r, uint8_t g, uint8_t b)
 
 void PHL_GraphicsInit()
 {
-	if ( SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK ) < 0) {
-		fprintf(stderr, "Error");
-		SDL_Delay(5000);
-		exit(EXIT_FAILURE);
-	}
-	
 	SDL_ShowCursor(SDL_DISABLE);
 
 	Input_InitJoystick();

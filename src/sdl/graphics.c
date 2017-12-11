@@ -11,6 +11,14 @@ SDL_Surface* backbuffer = NULL;
 int wantFullscreen = 0;
 int screenScale = 2;
 
+int deltaX = 0;
+int deltaY = 0;
+
+int screenW = 640;
+int screenH = 480;
+
+int drawscreen = 0;
+
 static uint32_t tframe;
 
 extern void Input_InitJoystick();
@@ -31,8 +39,9 @@ void PHL_GraphicsInit()
     uint32_t flags = SDL_HWSURFACE|SDL_DOUBLEBUF;
 	if(wantFullscreen)
     	flags |= SDL_FULLSCREEN;
-    screen = SDL_SetVideoMode(320*screenScale, 240*screenScale, 0, flags);
-    drawbuffer = screen;
+    screen = SDL_SetVideoMode(screenW, screenH, 0, flags);
+	drawbuffer = screen;
+	drawscreen = 1;
 	backbuffer = PHL_NewSurface(320*screenScale, 240*screenScale);
 	tframe = SDL_GetTicks();
 }
@@ -50,6 +59,20 @@ void PHL_StartDrawing()
 }
 void PHL_EndDrawing()
 {
+	// handle black borders
+	if(deltaX) {
+		SDL_Rect rect = {0, 0, deltaX, screenH};
+		SDL_FillRect(screen, &rect, SDL_MapRGB(screen->format, 0, 0, 0));
+		rect.x = screenW - deltaX -1;
+		SDL_FillRect(screen, &rect, SDL_MapRGB(screen->format, 0, 0, 0));
+	}
+	if(deltaY) {
+		SDL_Rect rect = {0, 0, screenW, deltaY};
+		SDL_FillRect(screen, &rect, SDL_MapRGB(screen->format, 0, 0, 0));
+		rect.y = screenH - deltaY -1;
+		SDL_FillRect(screen, &rect, SDL_MapRGB(screen->format, 0, 0, 0));
+	}
+
     SDL_Flip(screen);
 	uint32_t tnext = tframe + 1000/60;
 	while((tframe = SDL_GetTicks())<tnext)
@@ -63,11 +86,13 @@ void PHL_ForceScreenUpdate()
 
 void PHL_SetDrawbuffer(PHL_Surface surf)
 {
-    drawbuffer = surf;
+	drawbuffer = surf;
+	drawscreen = (surf==screen);
 }
 void PHL_ResetDrawbuffer()
 {
-    drawbuffer = screen;
+	drawbuffer = screen;
+	drawscreen = 1;
 }
 
 //PHL_RGB PHL_NewRGB(int r, int g, int b);
@@ -151,7 +176,7 @@ PHL_Surface PHL_LoadBMP(int index)
 
 void PHL_DrawRect(int x, int y, int w, int h, SDL_Color col)
 {
-	SDL_Rect rect = {x*screenScale/2, y*screenScale/2, w*screenScale/2, h*screenScale/2};
+	SDL_Rect rect = {x*screenScale/2 + (drawscreen?deltaX:0), y*screenScale/2 + (drawscreen?deltaY:0), w*screenScale/2, h*screenScale/2};
 	
 	SDL_FillRect(drawbuffer, &rect, SDL_MapRGB(drawbuffer->format, col.r, col.g, col.b));
 }
@@ -168,8 +193,8 @@ void PHL_DrawSurface(double x, double y, PHL_Surface surface)
 	}
 	
 	SDL_Rect offset;
-	offset.x = x*screenScale/2;
-	offset.y = y*screenScale/2;
+	offset.x = x*screenScale/2 + (drawscreen?deltaX:0);
+	offset.y = y*screenScale/2 + (drawscreen?deltaY:0);
 	
 	SDL_BlitSurface(surface, NULL, drawbuffer, &offset);
 }
@@ -190,15 +215,15 @@ void PHL_DrawSurfacePart(double x, double y, int cropx, int cropy, int cropw, in
 	crop.w = cropw*screenScale/2;
 	crop.h = croph*screenScale/2;
 	
-	offset.x = x*screenScale/2;
-	offset.y = y*screenScale/2;
+	offset.x = x*screenScale/2 + (drawscreen?deltaX:0);
+	offset.y = y*screenScale/2 + (drawscreen?deltaY:0);
 	
 	SDL_BlitSurface(surface, &crop, drawbuffer, &offset);
 }
 
 void PHL_DrawBackground(PHL_Background back, PHL_Background fore)
 {
-    PHL_DrawSurface(0, 0, backbuffer);
+	PHL_DrawSurface(0, 0, backbuffer);
 }
 void PHL_UpdateBackground(PHL_Background back, PHL_Background fore)
 {

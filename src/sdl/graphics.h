@@ -30,6 +30,12 @@ extern PHL_Surface screen;
 extern int wantFullscreen;
 extern int screenScale;
 
+extern int deltaX;
+extern int deltaY;
+
+extern int screenW;
+extern int screenH;
+
 SDL_Color PHL_NewRGB(uint8_t r, uint8_t g, uint8_t b);
 /*
 {

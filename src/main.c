@@ -48,7 +48,7 @@ int main(int argc, char **argv)
 		SDL_Delay(5000);
 		exit(EXIT_FAILURE);
 	}
-	
+	int desktopFS = 0;
 	#if defined(PANDORA) || defined(PYRA) || defined(CHIP) || defined(ODROID)
 	wantFullscreen = 1;
 	#else
@@ -57,20 +57,10 @@ int main(int argc, char **argv)
 	#ifdef CHIP
 	screenScale = 1;
 	#elif defined(PYRA)
-	screenScale = 3;
+	//screenScale = 3;
+	desktopFS = 1;
 	#elif defined(ODROID)
-	const SDL_VideoInfo* infos = SDL_GetVideoInfo();
-	int maxy = infos->current_h;
-	if(maxy < 640)
-		screenScale = 1;
-	else if (maxy < 720)
-		screenScale = 2;
-	else if (maxy < 960)
-		screenScale = 3;
-	else if (maxy < 1200)
-		screenScale = 4;
-	else
-		screenScale = 5;
+	desktopFS = 1;
 	#else
 	screenScale = 2;
 	#endif
@@ -82,6 +72,10 @@ int main(int argc, char **argv)
 			wantFullscreen = 1;
 		if(!strcmp(argv[i], "--fullscreen"))
 			wantFullscreen = 1;
+		if(!strcmp(argv[i], "-d"))
+			desktopFS = 1;
+		if(!strcmp(argv[i], "--desktop"))
+			desktopFS = 1;
 		if(!strcmp(argv[i], "-x1"))
 			screenScale = 1;
 		if(!strcmp(argv[i], "-x2"))
@@ -97,11 +91,27 @@ int main(int argc, char **argv)
 		if(!strcmp(argv[i], "--nojoy"))
 			useJoystick = 0;
 		if(!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help")) {
-			printf("Quick help\n\t-f|--fullscreen\tUse fullscreen\n\t-x1|-x2|-x3|-x4\tUse screenScale of *1..*4 (default *2 = 640x480)\n\t-j|-nojoy\tdo not use Joystick\n");
+			printf("Quick help\n\t-f|--fullscreen\tUse fullscreen\n\t-d|--desktop\tdesktop fullscreen\n\t-x1|-x2|-x3|-x4\tUse screenScale of *1..*4 (default *2 = 640x480)\n\t-j|-nojoy\tdo not use Joystick\n");
 			exit(0);
 		}
 	}
-	printf("Hydra Caslte Labyrinth, %s scale=x%d, using Joystick=%d\n", wantFullscreen?"Fullscreen":"Windowed", screenScale, useJoystick);
+	if(desktopFS)
+	{
+		const SDL_VideoInfo* infos = SDL_GetVideoInfo();
+		screenH = infos->current_h;
+		screenW = infos->current_w;
+		if(screenW/320 < screenH/240)
+			screenScale = screenW/320;
+		else
+			screenScale = screenH/240; // automatic guess the scale
+		deltaX = (screenW-320*screenScale)/2;
+		deltaY = (screenH-240*screenScale)/2;
+
+	} else {
+		screenW = 320 * screenScale;
+		screenH = 240 * screenScale;
+	}
+	printf("Hydra Caslte Labyrinth, %s %dx%d scale=x%d, using Joystick=%d\n", (wantFullscreen || desktopFS)?"Fullscreen":"Windowed", screenW, screenH, screenScale, useJoystick);
 	#endif
 	
 	srand(time(NULL));

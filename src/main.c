@@ -64,6 +64,7 @@ int main(int argc, char **argv)
 		screenScale = 3;
 	else
 		screenScale = 4;
+	XCloseDisplay(disp);
 	#else
 	screenScale = 2;
 	#endif

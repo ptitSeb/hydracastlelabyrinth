@@ -76,7 +76,8 @@ void Input_KeyEvent(SDL_Event* evt)
         case SDLK_d:        bFaceRight = w; break;
         case SDLK_r:        bR = w; break;
         case SDLK_w:        bL = w; break;
-        case SDLK_SPACE:    bSelect = w; break;
+		case SDLK_SPACE:    bSelect = w; break;
+		case SDLK_ESCAPE:   bSelect = w; break;
         case SDLK_RETURN:   bStart = w; break;
 #endif
     }

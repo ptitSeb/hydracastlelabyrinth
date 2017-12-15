@@ -48,7 +48,6 @@ int main(int argc, char **argv)
 		SDL_Delay(5000);
 		exit(EXIT_FAILURE);
 	}
-	int desktopFS = 0;
 	#if defined(PANDORA) || defined(PYRA) || defined(CHIP) || defined(ODROID)
 	wantFullscreen = 1;
 	#else

@@ -10,6 +10,7 @@ SDL_Surface* backbuffer = NULL;
 
 int wantFullscreen = 0;
 int screenScale = 2;
+int desktopFS = 0;
 
 int deltaX = 0;
 int deltaY = 0;
@@ -39,7 +40,19 @@ void PHL_GraphicsInit()
     uint32_t flags = SDL_HWSURFACE|SDL_DOUBLEBUF;
 	if(wantFullscreen)
     	flags |= SDL_FULLSCREEN;
-    screen = SDL_SetVideoMode(screenW, screenH, 0, flags);
+    screen = SDL_SetVideoMode((desktopFS)?0:screenW, (desktopFS)?0:screenH, 0, flags);
+	if(desktopFS)
+	{
+		const SDL_VideoInfo* infos = SDL_GetVideoInfo();
+		screenH = infos->current_h;
+		screenW = infos->current_w;
+		if(screenW/320 < screenH/240)
+			screenScale = screenW/320;
+		else
+			screenScale = screenH/240; // automatic guess the scale
+		deltaX = (screenW-320*screenScale)/2;
+		deltaY = (screenH-240*screenScale)/2;
+	}
 	drawbuffer = screen;
 	drawscreen = 1;
 	backbuffer = PHL_NewSurface(320*screenScale, 240*screenScale);

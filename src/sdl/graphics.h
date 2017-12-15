@@ -29,6 +29,7 @@ extern PHL_Surface screen;
 
 extern int wantFullscreen;
 extern int screenScale;
+extern int desktopFS;
 
 extern int deltaX;
 extern int deltaY;

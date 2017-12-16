@@ -38,7 +38,7 @@ void PHL_GraphicsInit()
 	Input_InitJoystick();
     
     uint32_t flags = SDL_HWSURFACE|SDL_DOUBLEBUF;
-	if(wantFullscreen)
+	if(wantFullscreen || desktopFS)
     	flags |= SDL_FULLSCREEN;
     screen = SDL_SetVideoMode((desktopFS)?0:screenW, (desktopFS)?0:screenH, 0, flags);
 	if(desktopFS)

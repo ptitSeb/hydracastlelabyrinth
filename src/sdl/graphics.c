@@ -72,6 +72,15 @@ void PHL_StartDrawing()
 }
 void PHL_EndDrawing()
 {
+	//implement some crude frameskiping, limited to 2 frame skip
+	static skip = 0;
+	uint32_t tnext = tframe + 1000/60;
+	if (SDL_GetTicks()>tnext && skip<2) {
+		tframe += 1000/60;
+		skip++;
+		return;
+	}
+
 	// handle black borders
 	if(deltaX) {
 		SDL_Rect rect = {0, 0, deltaX, screenH};
@@ -87,7 +96,6 @@ void PHL_EndDrawing()
 	}
 
     SDL_Flip(screen);
-	uint32_t tnext = tframe + 1000/60;
 	while((tframe = SDL_GetTicks())<tnext)
         SDL_Delay(10);
 }
@@ -111,7 +119,7 @@ void PHL_ResetDrawbuffer()
 //PHL_RGB PHL_NewRGB(int r, int g, int b);
 void PHL_SetColorKey(PHL_Surface surf, int r, int g, int b)
 {
-    SDL_SetColorKey(surf, SDL_SRCCOLORKEY, SDL_MapRGB(surf->format, r, g, b));
+    SDL_SetColorKey(surf, SDL_SRCCOLORKEY|SDL_RLEACCEL, SDL_MapRGB(surf->format, r, g, b));
 }
 
 PHL_Surface PHL_NewSurface(int w, int h)
@@ -168,9 +176,9 @@ PHL_Surface PHL_LoadBMP(int index)
 				if (dx == 0 && dy == 0) {					
 					//Darkness special case
 					if (index == 27) {
-						SDL_SetColorKey(surf, SDL_SRCCOLORKEY, SDL_MapRGB(surf->format, 0x00, 0x00, 0x00));
+						SDL_SetColorKey(surf, SDL_SRCCOLORKEY|SDL_RLEACCEL, SDL_MapRGB(surf->format, 0x00, 0x00, 0x00));
 					}else{
-						SDL_SetColorKey(surf, SDL_SRCCOLORKEY, SDL_MapRGB(surf->format, palette[0][0].r, palette[0][0].g, palette[0][0].b));
+						SDL_SetColorKey(surf, SDL_SRCCOLORKEY|SDL_RLEACCEL, SDL_MapRGB(surf->format, palette[0][0].r, palette[0][0].g, palette[0][0].b));
 					}
 				}
 				

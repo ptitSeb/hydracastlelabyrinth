@@ -25,7 +25,7 @@ And launch the game with
 ```
 ./hcl
 ```
-To start windowed 640x480 game. You can have fullscreen with `./hcl -f`.
+To start windowed 640x480 game. You can have fullscreen with `./hcl -f` or `./hcl -d` to have fullscreen at current desktop resolution.
 
 ![sreenshot on Pandora](screenshot.png "screenshot on Pandora")
 

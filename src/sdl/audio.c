@@ -1,11 +1,15 @@
 #include "audio.h"
 #include <SDL/SDL.h>
 
+int music_volume = 4;
+
 void PHL_AudioInit()
 {
     SDL_InitSubSystem(SDL_INIT_AUDIO);
     Mix_Init(0);
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
+
+    PHL_MusicVolume(0.25f * music_volume);
 }
 
 void PHL_AudioClose()
@@ -35,6 +39,10 @@ PHL_Sound PHL_LoadSound(char* fname)
     return Mix_LoadWAV(buff);
 }
 
+void PHL_MusicVolume(float vol)
+{
+    Mix_VolumeMusic(SDL_MIX_MAXVOLUME*vol);
+}
 
 void PHL_PlayMusic(PHL_Music snd)
 {

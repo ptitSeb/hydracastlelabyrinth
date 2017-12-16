@@ -12,8 +12,12 @@ typedef struct
 
 } PHL_Music;
 
+extern int music_volume;
+
 void PHL_AudioInit();
 void PHL_AudioClose();
+
+void PHL_MusicVolume(float vol);
 
 PHL_Music PHL_LoadMusic(char* fname, int loop); //Same as PHL_LoadSound, but expects a file name without extension
 PHL_Sound PHL_LoadSound(char* fname);

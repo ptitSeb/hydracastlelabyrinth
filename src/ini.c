@@ -13,6 +13,7 @@ void sizeLoad(char* first, char* second);
 void blurLoad(char* first, char* second);
 void languageLoad(char* first, char* second);
 void autosaveLoad(char* first, char* second);
+void musicvolumeLoad(char* first, char* second);
 
 void iniInit()
 {
@@ -117,6 +118,12 @@ void saveSettings()
 		}else{
 			fprintf(f, "off");
 		}
+
+		#ifdef _SDL
+		fprintf(f, "\r\n[audio]");
+		fprintf(f, "\r\nmusic=%d", music_volume);
+		// Audio
+		#endif
 		fclose(f);
 	}
 	
@@ -153,7 +160,7 @@ void loadSettings()
 			lineptr = trimString(lineptr);
 			
 			if (lineptr != NULL) {				
-				//Ignore catigory lines
+				//Ignore category lines
 				if (lineptr[0] != '[')
 				{
 					//Check if it has a = delimiter first
@@ -178,6 +185,7 @@ void loadSettings()
 									blurLoad(fhalf, shalf);
 									languageLoad(fhalf, shalf);
 									autosaveLoad(fhalf, shalf);
+									musicvolumeLoad(fhalf, shalf);
 								}
 							}
 							
@@ -301,4 +309,16 @@ void autosaveLoad(char* first, char* second)
 			setAutoSave(0);
 		}
 	}
+}
+
+void musicvolumeLoad(char* first, char* second)
+{
+	#ifdef _SDL
+	if (strcmp(first, "music") == 0) {
+		if (second[0] >= '0' && second[0] <= '4') {
+			music_volume = second[0]-'0';
+			PHL_MusicVolume(0.25f * music_volume);
+		}
+	}
+	#endif
 }

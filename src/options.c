@@ -146,6 +146,14 @@ int optionsStep()
 					}
 				}
 			#endif
+
+			#ifdef _SDL
+				// Music volume
+				if(optCursor == 2) {
+					music_volume = (music_volume+1)%5;
+					PHL_MusicVolume(0.25f * music_volume);
+				}
+			#endif
 			
 			//Back
 			if (optCursor == lastOption) {
@@ -249,6 +257,16 @@ void optionsDraw()
 				PHL_DrawTextBold("OFF", xright, ydraw, YELLOW);
 			}
 			
+			ydraw += ystep;
+			optioncount++;
+		#endif
+
+		#ifdef _SDL
+			// Music volume
+			PHL_DrawTextBold("MUSIC", xleft, ydraw, YELLOW);
+			char buff[50];
+			sprintf(buff, "%d%", music_volume*25);
+			PHL_DrawTextBold(buff, xright, ydraw, YELLOW);
 			ydraw += ystep;
 			optioncount++;
 		#endif

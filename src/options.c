@@ -278,7 +278,7 @@ void optionsDraw()
 			ydraw += ystep;
 			optioncount++;
 			// xBRZ scaling
-			PHL_DrawTextBold("xBRZ", xleft, ydraw, YELLOW);
+			PHL_DrawTextBold("XBRZ", xleft, ydraw, YELLOW);
 			if (getXBRZ() == 1) {
 				PHL_DrawTextBold("ON", xright, ydraw, YELLOW);
 			}

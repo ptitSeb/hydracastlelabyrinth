@@ -273,7 +273,7 @@ void optionsDraw()
 			// Music volume
 			PHL_DrawTextBold("MUSIC", xleft, ydraw, YELLOW);
 			char buff[50];
-			sprintf(buff, "%d%", music_volume*25);
+			sprintf(buff, "%d%%", music_volume*25);
 			PHL_DrawTextBold(buff, xright, ydraw, YELLOW);
 			ydraw += ystep;
 			optioncount++;

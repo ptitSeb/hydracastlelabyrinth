@@ -166,8 +166,6 @@ PHL_Surface PHL_LoadBMP(int index)
 		fread(QDAFile, 1, headers[index].size, f);
 		fclose(f);
 		
-		PHL_RGB palette[20][18];
-		
 		uint16_t w, h;
 		
 		//Read data from header
@@ -180,63 +178,76 @@ PHL_Surface PHL_LoadBMP(int index)
 		//Load Palette
 		int dx, dy;
 		int count = 0;
-		for (dx = 0; dx < 20; dx++) {
-			for (dy = 0; dy < 16; dy++) {
-				if(getXBRZ()) {
-					palette[dx][dy].r = QDAFile[54 + count];
-					palette[dx][dy].g = QDAFile[54 + count + 1];
-					palette[dx][dy].b = QDAFile[54 + count + 2];
-					palette[dx][dy].unused = 255;
-				} else {
+
+		if(getXBRZ()) {
+			Uint32 palette[20][18];
+
+			for (dx = 0; dx < 20; dx++) {
+				for (dy = 0; dy < 16; dy++) {
+					palette[dx][dy] = 255<<24 | ((Uint32)QDAFile[54 + count])<<0 | ((Uint32)QDAFile[54 + count + 1])<<8 | ((Uint32)QDAFile[54 + count + 2])<<16;
+					count += 4;
+				}
+			}
+			Uint32* tmp = NULL;
+			tmp = (Uint32*)malloc(w*h*screenScale*4);
+			Uint32 transp;
+			for (dx = 0; dx < w; dx++) {
+				for (dy = 0; dy < h; dy++) {
+				
+					int pix = dx + w * dy;
+					int px = QDAFile[1078 + pix] / 16;
+					int py = QDAFile[1078 + pix] % 16;
+					//Get transparency from first palette color
+					if (dx == 0 && dy == 0) {					
+						//Darkness special case
+						if (index == 27)
+							transp = 255<<24;
+						else
+							transp = palette[0][0];
+					}
+					
+					Uint32 c = palette[px][py];
+					if(c==transp)
+						c=0;
+					tmp[(h-1-dy)*w+dx] = c;
+				}
+			}
+
+			xbrz_scale((void*)tmp, (void*)surf->pixels, w, h, screenScale);
+			free(tmp);
+		} else {
+			PHL_RGB palette[20][18];
+
+			for (dx = 0; dx < 20; dx++) {
+				for (dy = 0; dy < 16; dy++) {
 					palette[dx][dy].b = QDAFile[54 + count];
 					palette[dx][dy].g = QDAFile[54 + count + 1];
 					palette[dx][dy].r = QDAFile[54 + count + 2];
+					count += 4;
 				}
-				count += 4;
 			}
-		}
-		Uint32* tmp = NULL;
-		if(getXBRZ())
-			tmp = (Uint32*)malloc(w*h*screenScale*4);
-		PHL_RGB transp;
-		for (dx = 0; dx < w; dx++) {
-			for (dy = 0; dy < h; dy++) {
-			
-				int pix = dx + w * dy;
-				int px = QDAFile[1078 + pix] / 16;
-				int py = QDAFile[1078 + pix] % 16;
-				//Get transparency from first palette color
-				if (dx == 0 && dy == 0) {					
-					//Darkness special case
-					if (index == 27) {
-						if(getXBRZ()) {
-							transp.r = 0; transp.g = 0; transp.b = 0; transp.unused = 255;
-						} else
-							SDL_SetColorKey(surf, SDL_SRCCOLORKEY|SDL_RLEACCEL, SDL_MapRGB(surf->format, 0x00, 0x00, 0x00));
-					}else{
-						if(getXBRZ()) {
-							transp = palette[0][0];
-						} else
-							SDL_SetColorKey(surf, SDL_SRCCOLORKEY|SDL_RLEACCEL, SDL_MapRGB(surf->format, palette[0][0].r, palette[0][0].g, palette[0][0].b));
-					}
-				}
+			for (dx = 0; dx < w; dx++) {
+				for (dy = 0; dy < h; dy++) {
 				
-				PHL_RGB c = palette[px][py];
-				if(getXBRZ()) {
-					Uint32 c = *(Uint32*)&palette[px][py];
-					if(c==*(Uint32*)&transp)
-						c=0;
-					tmp[(h-1-dy)*w+dx] = c;
-				} else {
+					int pix = dx + w * dy;
+					int px = QDAFile[1078 + pix] / 16;
+					int py = QDAFile[1078 + pix] % 16;
+					//Get transparency from first palette color
+					if (dx == 0 && dy == 0) {					
+						//Darkness special case
+						if (index == 27) {
+							SDL_SetColorKey(surf, SDL_SRCCOLORKEY|SDL_RLEACCEL, SDL_MapRGB(surf->format, 0x00, 0x00, 0x00));
+						}else{
+							SDL_SetColorKey(surf, SDL_SRCCOLORKEY|SDL_RLEACCEL, SDL_MapRGB(surf->format, palette[0][0].r, palette[0][0].g, palette[0][0].b));
+						}
+					}
+					
+					PHL_RGB c = palette[px][py];
 					//PHL_DrawRect(dx * 2, dy * 2, 2, 2, c);
 					SDL_Rect rect = {dx * screenScale, (h-1-dy) * screenScale, screenScale, screenScale};	
 					SDL_FillRect(surf, &rect, SDL_MapRGB(surf->format, c.r, c.g, c.b));
 				}
 			}
-		}
-		if(getXBRZ()) {
-			xbrz_scale((void*)tmp, (void*)surf->pixels, w, h, screenScale);
-			free(tmp);
 		}
 		free(QDAFile);
 	}

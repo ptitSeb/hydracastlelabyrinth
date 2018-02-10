@@ -85,12 +85,16 @@ int main(int argc, char **argv)
 			screenScale = 4;
 		if(!strcmp(argv[i], "-x5"))
 			screenScale = 5;
+		if(!strcmp(argv[i], "--xbrz"))
+			setXBRZ(1);
+		if(!strcmp(argv[i], "--no-xbrz"))
+			setXBRZ(0);
 		if(!strcmp(argv[i], "-j"))
 			useJoystick = 0;
 		if(!strcmp(argv[i], "--nojoy"))
 			useJoystick = 0;
 		if(!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help")) {
-			printf("Quick help\n\t-f|--fullscreen\tUse fullscreen\n\t-d|--desktop\tdesktop fullscreen\n\t-x1|-x2|-x3|-x4\tUse screenScale of *1..*4 (default *2 = 640x480)\n\t-j|-nojoy\tdo not use Joystick\n");
+			printf("Quick help\n-f|--fullscreen\tUse fullscreen\n-d|--desktop\tdesktop fullscreen\n-x1|-x2|-x3|-x4\tUse screenScale of *1..*4 (default *2 = 640x480)\n-j|-nojoy\tdo not use Joystick\n--xbrz\tUse xBRZ scaling\n--no-xbrz\tNo xBRZ scaling\n");
 			exit(0);
 		}
 	}
@@ -110,7 +114,7 @@ int main(int argc, char **argv)
 		screenW = 320 * screenScale;
 		screenH = 240 * screenScale;
 	}
-	printf("Hydra Caslte Labyrinth, %s %dx%d scale=x%d, using Joystick=%d\n", (wantFullscreen || desktopFS)?"Fullscreen":"Windowed", screenW, screenH, screenScale, useJoystick);
+	printf("Hydra Caslte Labyrinth, %s %dx%d scale=x%d%s, using Joystick=%d\n", (wantFullscreen || desktopFS)?"Fullscreen":"Windowed", screenW, screenH, screenScale, getXBRZ()?" xBRZ":"", useJoystick);
 	#endif
 	
 	srand(time(NULL));

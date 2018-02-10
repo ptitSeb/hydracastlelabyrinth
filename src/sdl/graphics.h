@@ -72,4 +72,7 @@ void PHL_DrawSurfacePart(double x, double y, int cropx, int cropy, int cropw, in
 void PHL_DrawBackground(PHL_Background back, PHL_Background fore);
 void PHL_UpdateBackground(PHL_Background back, PHL_Background fore);
 
+int getXBRZ();
+void setXBRZ(int active);
+
 #endif

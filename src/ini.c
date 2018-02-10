@@ -11,6 +11,7 @@ char* trimString(char* orig);
 void screenLoad(char* first, char* second);
 void sizeLoad(char* first, char* second);
 void blurLoad(char* first, char* second);
+void xbrzLoad(char* first, char* second);
 void languageLoad(char* first, char* second);
 void autosaveLoad(char* first, char* second);
 void musicvolumeLoad(char* first, char* second);
@@ -99,7 +100,16 @@ void saveSettings()
 				fprintf(f, "off");
 			}			
 		#endif
-		
+		#ifdef _SDL
+			//xBRZ Scaling
+			fprintf(f, "\r\nxbrz=");
+			if (getXBRZ() == 1) {
+				fprintf(f, "on");
+			}else{
+				fprintf(f, "off");
+			}			
+		#endif
+
 		fprintf(f, "\r\n[system]");
 		
 		//Language
@@ -183,6 +193,7 @@ void loadSettings()
 									screenLoad(fhalf, shalf);
 									sizeLoad(fhalf, shalf);									
 									blurLoad(fhalf, shalf);
+									xbrzLoad(fhalf, shalf);
 									languageLoad(fhalf, shalf);
 									autosaveLoad(fhalf, shalf);
 									musicvolumeLoad(fhalf, shalf);
@@ -280,6 +291,20 @@ void blurLoad(char* first, char* second)
 			//fprintf(debug, "\nblur is off");
 			//oslSetBilinearFilter(0);
 			setBlur(0);
+		}
+	}
+	#endif
+}
+
+void xbrzLoad(char* first, char* second)
+{
+	#ifdef _SDL
+	if (strcmp(first, "xbrz") == 0) {
+		if (strcmp(second, "on") == 0) {
+			setXBRZ(1);
+		}
+		if (strcmp(second, "off") == 0) {
+			setXBRZ(0);
 		}
 	}
 	#endif

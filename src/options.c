@@ -153,6 +153,14 @@ int optionsStep()
 					music_volume = (music_volume+1)%5;
 					PHL_MusicVolume(0.25f * music_volume);
 				}
+				// xBRZ
+				if (optCursor == 3) {
+					if (getXBRZ() == 0) {
+						setXBRZ(1);
+					}else{
+						setXBRZ(0); 
+					}
+				}
 			#endif
 			
 			//Back
@@ -267,6 +275,16 @@ void optionsDraw()
 			char buff[50];
 			sprintf(buff, "%d%", music_volume*25);
 			PHL_DrawTextBold(buff, xright, ydraw, YELLOW);
+			ydraw += ystep;
+			optioncount++;
+			// xBRZ scaling
+			PHL_DrawTextBold("xBRZ", xleft, ydraw, YELLOW);
+			if (getXBRZ() == 1) {
+				PHL_DrawTextBold("ON", xright, ydraw, YELLOW);
+			}
+			else{
+				PHL_DrawTextBold("OFF", xright, ydraw, YELLOW);
+			}
 			ydraw += ystep;
 			optioncount++;
 		#endif

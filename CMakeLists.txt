@@ -27,13 +27,15 @@ find_package(SDL_mixer REQUIRED)
 INCLUDE_DIRECTORIES(${SDL_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${SDL_MIXER_INCLUDE_DIRS})
 
-#Need c++11
+#Need c++11 and c99
 if (CMAKE_VERSION VERSION_LESS "3.1")
 	if (CMAKE_C_COMPILER_ID STREQUAL "GNU")
-  		set (CMAKE_C_FLAGS "-std=gnu99 ${CMAKE_CXX_FLAGS}")
+		set (CMAKE_C_FLAGS "-std=gnu99 ${CMAKE_C_FLAGS}")
+		set (CMAKE_CXX_FLAGS "-std=c+11 ${CMAKE_CXX_FLAGS}")
 	endif ()
 else ()
 	set (CMAKE_C_STANDARD 99)
+	set (CMAKE_CXX_STANDARD 11)
 endif ()
 
 set(HCL_SOURCE_FILES
@@ -93,6 +95,8 @@ set(HCL_SDL_FILES
 	src/sdl/input.c
 	src/sdl/graphics.c
 	src/sdl/system.c
+	src/xBRZ/xbrz.cpp
+	src/sdl/scale.cpp
 )
 
 if(PANDORA)

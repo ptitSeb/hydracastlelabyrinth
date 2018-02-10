@@ -3,6 +3,7 @@
 #include "../game.h"
 #include "../qda.h"
 #include "graphics.h"
+#include "scale.h"
 
 SDL_Surface* screen = NULL;
 SDL_Surface* drawbuffer = NULL;
@@ -20,10 +21,29 @@ int screenH = 480;
 
 int drawscreen = 0;
 
+int xbrz = 0;
+
 static uint32_t tframe;
 
 extern void Input_InitJoystick();
 extern void Input_CloseJoystick();
+
+int getXBRZ()
+{
+	return xbrz;
+}
+
+void setXBRZ(int active)
+{
+	if(active) active = 1;
+	if(xbrz==active) return;
+	xbrz = active;
+
+	// try to reload everything, but boss ressource will not be reloaded
+	freeResources();
+	loadResources();
+}
+
 
 SDL_Color PHL_NewRGB(uint8_t r, uint8_t g, uint8_t b)
 {
@@ -55,7 +75,7 @@ void PHL_GraphicsInit()
 	}
 	drawbuffer = screen;
 	drawscreen = 1;
-	backbuffer = PHL_NewSurface(320*screenScale, 240*screenScale);
+	backbuffer = SDL_CreateRGBSurface(0, 320*screenScale, 240*screenScale, 32, 0, 0, 0, 0);
 	tframe = SDL_GetTicks();
 }
 
@@ -73,7 +93,7 @@ void PHL_StartDrawing()
 void PHL_EndDrawing()
 {
 	//implement some crude frameskiping, limited to 2 frame skip
-	static skip = 0;
+	static int skip = 0;
 	uint32_t tnext = tframe + 1000/60;
 	if (SDL_GetTicks()>tnext && skip<2) {
 		tframe += 1000/60;
@@ -124,7 +144,10 @@ void PHL_SetColorKey(PHL_Surface surf, int r, int g, int b)
 
 PHL_Surface PHL_NewSurface(int w, int h)
 {
-    return SDL_CreateRGBSurface(0, w, h, 32, 0, 0, 0, 0);
+	if(getXBRZ())
+		return SDL_CreateRGBSurface(0, w, h, 32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000);
+	else
+    	return SDL_CreateRGBSurface(0, w, h, 32, 0, 0, 0, 0);
 }
 void PHL_FreeSurface(PHL_Surface surf)
 {
@@ -159,13 +182,23 @@ PHL_Surface PHL_LoadBMP(int index)
 		int count = 0;
 		for (dx = 0; dx < 20; dx++) {
 			for (dy = 0; dy < 16; dy++) {
-				palette[dx][dy].b = QDAFile[54 + count];
-				palette[dx][dy].g = QDAFile[54 + count + 1];
-				palette[dx][dy].r = QDAFile[54 + count + 2];
+				if(getXBRZ()) {
+					palette[dx][dy].r = QDAFile[54 + count];
+					palette[dx][dy].g = QDAFile[54 + count + 1];
+					palette[dx][dy].b = QDAFile[54 + count + 2];
+					palette[dx][dy].unused = 255;
+				} else {
+					palette[dx][dy].b = QDAFile[54 + count];
+					palette[dx][dy].g = QDAFile[54 + count + 1];
+					palette[dx][dy].r = QDAFile[54 + count + 2];
+				}
 				count += 4;
 			}
 		}
-		
+		Uint32* tmp = NULL;
+		if(getXBRZ())
+			tmp = (Uint32*)malloc(w*h*screenScale*4);
+		PHL_RGB transp;
 		for (dx = 0; dx < w; dx++) {
 			for (dy = 0; dy < h; dy++) {
 			
@@ -176,18 +209,34 @@ PHL_Surface PHL_LoadBMP(int index)
 				if (dx == 0 && dy == 0) {					
 					//Darkness special case
 					if (index == 27) {
-						SDL_SetColorKey(surf, SDL_SRCCOLORKEY|SDL_RLEACCEL, SDL_MapRGB(surf->format, 0x00, 0x00, 0x00));
+						if(getXBRZ()) {
+							transp.r = 0; transp.g = 0; transp.b = 0; transp.unused = 255;
+						} else
+							SDL_SetColorKey(surf, SDL_SRCCOLORKEY|SDL_RLEACCEL, SDL_MapRGB(surf->format, 0x00, 0x00, 0x00));
 					}else{
-						SDL_SetColorKey(surf, SDL_SRCCOLORKEY|SDL_RLEACCEL, SDL_MapRGB(surf->format, palette[0][0].r, palette[0][0].g, palette[0][0].b));
+						if(getXBRZ()) {
+							transp = palette[0][0];
+						} else
+							SDL_SetColorKey(surf, SDL_SRCCOLORKEY|SDL_RLEACCEL, SDL_MapRGB(surf->format, palette[0][0].r, palette[0][0].g, palette[0][0].b));
 					}
 				}
 				
 				PHL_RGB c = palette[px][py];
-				
-				//PHL_DrawRect(dx * 2, dy * 2, 2, 2, c);
-				SDL_Rect rect = {dx * screenScale, (h-1-dy) * screenScale, screenScale, screenScale};	
-				SDL_FillRect(surf, &rect, SDL_MapRGB(surf->format, c.r, c.g, c.b));
+				if(getXBRZ()) {
+					Uint32 c = *(Uint32*)&palette[px][py];
+					if(c==*(Uint32*)&transp)
+						c=0;
+					tmp[(h-1-dy)*w+dx] = c;
+				} else {
+					//PHL_DrawRect(dx * 2, dy * 2, 2, 2, c);
+					SDL_Rect rect = {dx * screenScale, (h-1-dy) * screenScale, screenScale, screenScale};	
+					SDL_FillRect(surf, &rect, SDL_MapRGB(surf->format, c.r, c.g, c.b));
+				}
 			}
+		}
+		if(getXBRZ()) {
+			xbrz_scale((void*)tmp, (void*)surf->pixels, w, h, screenScale);
+			free(tmp);
 		}
 		free(QDAFile);
 	}

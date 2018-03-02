@@ -235,6 +235,7 @@ void weaponStep(Weapon* w)
 				w->vsp = 0;
 			}else{
 				weaponHit(w);
+				return;
 			}
 		}
 		

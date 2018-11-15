@@ -4,6 +4,7 @@ option(PANDORA "Set to ON if targeting an OpenPandora device" ${PANDORA})
 option(ODROID "Set to ON if targeting an ODroid device" ${ODROID})
 option(PYRA "Set to ON if targeting an DragonBox Pyra device" ${PANDORA})
 option(CHIP "Set to ON if targeting an PocketCHIP device" ${PANDORA})
+option(USE_CCACHE "Set to ON to use ccache if present in the system" ${USE_CCACHE})
 
 
 if(PANDORA)
@@ -26,6 +27,14 @@ find_package(SDL_mixer REQUIRED)
 
 INCLUDE_DIRECTORIES(${SDL_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${SDL_MIXER_INCLUDE_DIRS})
+
+if(USE_CCACHE)
+    find_program(CCACHE_FOUND ccache)
+    if(CCACHE_FOUND)
+        set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
+        set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
+    endif()
+endif()
 
 #Need c++11 and c99
 if (CMAKE_VERSION VERSION_LESS "3.1")

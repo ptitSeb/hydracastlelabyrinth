@@ -177,10 +177,10 @@ void loadMessage(Message* m, FILE* f)
 {
 	unsigned char* buffer = (unsigned char*)malloc(sizeof(unsigned char) * 64);
 	
-	fread(buffer, 1, 64, f);
+	int cnt = fread(buffer, 1, 64, f);
 	
 	int i;
-	for (i = 0; i < 64; i+=2) {
+	for (i = 0; i < cnt; i+=2) {
 		m->x[i/2] = buffer[i];
 		m->y[i/2] = buffer[i+1];
 	}

@@ -666,7 +666,7 @@ void gameEnding()
 		PHL_PlayMusic(bgmMusic);
 		
 		//Calculate completion percentage
-		char treasureString[10];
+		char treasureString[11];
 		{
 			int itemCount = 0;
 			int ALLITEMS = 41;
@@ -950,7 +950,8 @@ void loadScreen()
 			size = ftell(file);
 			memblock = (char*)malloc(size);
 			fseek(file, 0, SEEK_SET);
-			fread(memblock, 1, size, file);
+			if(fread(memblock, 1, size, file) != size)
+				printf("Warning, could not read %s correctly\n", dest);
 			fclose(file);
 			
 			//Load data
@@ -1043,7 +1044,8 @@ void loadScreen()
 		size = ftell(file);
 		memblock = (unsigned char*)malloc(size);
 		fseek(file, 0, SEEK_SET);
-		fread(memblock, 1, size, file);
+		if(fread(memblock, 1, size, file) != size)
+			printf("Warning: could not read %s correctly\n", dest);
 		
 		int count = 0;
 		while (count < size) {
@@ -1497,37 +1499,38 @@ void loadSave(char* fname)
 	if ((f = fopen(fullPath, "rb"))) {
 		//Reminder: read order matters
 		unsigned long loadTemp = 0;
+		int tmp;
 		//Hero HP
-		fread(&loadTemp, 4, 1, f);
+		tmp = fread(&loadTemp, 4, 1, f);
 		herohp = loadTemp;
 		drawhp = herohp;
 		
 		//Max HP
-		fread(&loadTemp, 4, 1, f);
+		tmp = fread(&loadTemp, 4, 1, f);
 		maxhp = loadTemp;
 		
 		//Ammo
-		fread(&loadTemp, 4, 1, f);
+		tmp = fread(&loadTemp, 4, 1, f);
 		heroAmmo = loadTemp;
 		
 		//Max Ammo
-		fread(&loadTemp, 4, 1, f);
+		tmp = fread(&loadTemp, 4, 1, f);
 		maxAmmo = loadTemp;
 		
 		int loadedWeapon = 0;
-		fread(&loadedWeapon, 1, 1, f);
+		tmp = fread(&loadedWeapon, 1, 1, f);
 				
 		//Read Flags
 		fseek(f, 0x3FC, SEEK_SET);
 		int i;
 		for (i = 0; i < 60; i++) {
-			fread(&flags[i], 1, 1, f);
+			tmp = fread(&flags[i], 1, 1, f);
 		}
 		
 		//Read weapons
 		fseek(f, 0x7E4, SEEK_SET);
 		for (i = 0; i < 5; i++) {
-			fread(&hasWeapon[i], 1, 1, f);
+			tmp = fread(&hasWeapon[i], 1, 1, f);
 		}
 		
 		heroWeapon = -1;
@@ -1542,35 +1545,35 @@ void loadSave(char* fname)
 							  18, 24, 27, 22, 19, 20, 23 };
 		fseek(f, 0x7EA, SEEK_SET);
 		for (i = 0; i < 28; i++) {
-			fread(&hasItem[itemorder[i]], 1, 1, f);
+			tmp = fread(&hasItem[itemorder[i]], 1, 1, f);
 		}
 		
 		//Read keys
 		for (i = 0; i < 8; i++) {
-			fread(&hasKey[i], 1, 1, f);
+			tmp = fread(&hasKey[i], 1, 1, f);
 		}
 		
 		fseek(f, 0x11AC, SEEK_SET);
-		fread(&playTime, 4, 1, f);
+		tmp = fread(&playTime, 4, 1, f);
 		
 		//fseek(f, 4540, SEEK_SET);
 		//Hero X and Y
-		fread(&loadTemp, 4, 1, f);
+		tmp = fread(&loadTemp, 4, 1, f);
 		herox = loadTemp;		
-		fread(&loadTemp, 4, 1, f);
+		tmp = fread(&loadTemp, 4, 1, f);
 		heroy = loadTemp;
 		
 		//Level
-		fread(&loadTemp, 4, 1, f);
+		tmp = fread(&loadTemp, 4, 1, f);
 		level = loadTemp;
 		
 		//Screen coords
-		fread(&loadTemp, 4, 1, f);
+		tmp = fread(&loadTemp, 4, 1, f);
 		screenX = (loadTemp) % 12;
 		screenY = ((int)(loadTemp) / 12);
 		
 		//Direction
-		fread(&loadTemp, 4, 1, f);		
+		tmp = fread(&loadTemp, 4, 1, f);		
 		if (loadTemp == 0) {
 			setHeroDirection(1);
 		}else{

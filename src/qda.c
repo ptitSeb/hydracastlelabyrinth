@@ -27,7 +27,8 @@ int initQDA()
 		//Read header data into memory
 		int allHeadersSize = 0x1F5C;
 		unsigned char* QDAFile = (unsigned char*)malloc(allHeadersSize);
-		fread(QDAFile, allHeadersSize, 1, f);
+		int tmp = fread(QDAFile, allHeadersSize, 1, f);
+		(void)tmp;
 		
 		//Check if QDA file is valid
 		{

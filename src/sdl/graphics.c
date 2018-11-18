@@ -163,7 +163,7 @@ PHL_Surface PHL_LoadBMP(int index)
 	if ( (f = fopen("data/bmp.qda", "rb")) ) {
 		uint8_t* QDAFile = (uint8_t*)malloc(headers[index].size);
 		fseek(f, headers[index].offset, SEEK_SET);
-		fread(QDAFile, 1, headers[index].size, f);
+		int tmp = fread(QDAFile, 1, headers[index].size, f);
 		fclose(f);
 		
 		uint16_t w, h;

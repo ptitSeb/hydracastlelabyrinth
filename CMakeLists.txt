@@ -6,6 +6,8 @@ option(PYRA "Set to ON if targeting an DragonBox Pyra device" ${PANDORA})
 option(CHIP "Set to ON if targeting an PocketCHIP device" ${PANDORA})
 option(USE_CCACHE "Set to ON to use ccache if present in the system" ${USE_CCACHE})
 
+option(USE_SDL2 "Use SDL2 instead of SDL1.2" ${USE_SDL2})
+
 
 if(PANDORA)
 	add_definitions(-DPANDORA)
@@ -19,14 +21,22 @@ endif()
 if(ODROID)
 	add_definitions(-DODROID)
 endif()
-#create a _SDL2 later?
-add_definitions(-D_SDL)
 
-find_package(SDL REQUIRED)
-find_package(SDL_mixer REQUIRED)
-
-INCLUDE_DIRECTORIES(${SDL_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${SDL_MIXER_INCLUDE_DIRS})
+if(USE_SDL2)
+	add_definitions(-D_SDL -D_SDL2)
+	find_package(SDL2 REQUIRED)
+	#find_package(SDL2_mixer REQUIRED)
+	
+	INCLUDE_DIRECTORIES(${SDL2_INCLUDE_DIRS})
+	#INCLUDE_DIRECTORIES(${SDL2_MIXER_INCLUDE_DIRS})
+else()
+	add_definitions(-D_SDL)
+	find_package(SDL REQUIRED)
+	find_package(SDL_mixer REQUIRED)
+	
+	INCLUDE_DIRECTORIES(${SDL_INCLUDE_DIRS})
+	INCLUDE_DIRECTORIES(${SDL_MIXER_INCLUDE_DIRS})
+endif()
 
 if(USE_CCACHE)
     find_program(CCACHE_FOUND ccache)
@@ -99,14 +109,25 @@ set(HCL_SOURCE_FILES
 	src/enemies/waterjumper.c
 	src/enemies/wizard.c
 )
-set(HCL_SDL_FILES
-	src/sdl/audio.c
-	src/sdl/input.c
-	src/sdl/graphics.c
-	src/sdl/system.c
-	src/xBRZ/xbrz.cpp
-	src/sdl/scale.cpp
-)
+if(USE_SDL2)
+	set(HCL_SDL_FILES
+		src/sdl2/audio.c
+		src/sdl2/input.c
+		src/sdl2/graphics.c
+		src/sdl2/system.c
+		src/xBRZ/xbrz.cpp
+		src/sdl2/scale.cpp
+	)
+else()
+	set(HCL_SDL_FILES
+		src/sdl/audio.c
+		src/sdl/input.c
+		src/sdl/graphics.c
+		src/sdl/system.c
+		src/xBRZ/xbrz.cpp
+		src/sdl/scale.cpp
+	)
+endif()
 
 if(PANDORA)
 	add_definitions(-mcpu=cortex-a8)
@@ -115,8 +136,13 @@ if(PANDORA)
 	add_definitions(-ftree-vectorize)
 endif(PANDORA)
 
-set (EXTRA_LIBS ${EXTRA_LIBS} ${SDL_LIBRARY})
-set (EXTRA_LIBS ${EXTRA_LIBS} ${SDL_MIXER_LIBRARY})
+if(USE_SDL2)
+	set (EXTRA_LIBS ${EXTRA_LIBS} ${SDL2_LIBRARIES})
+	set (EXTRA_LIBS ${EXTRA_LIBS} SDL2_mixer)
+else()
+	set (EXTRA_LIBS ${EXTRA_LIBS} ${SDL_LIBRARY})
+	set (EXTRA_LIBS ${EXTRA_LIBS} ${SDL_MIXER_LIBRARY})
+endif()
 
 add_executable(hcl ${HCL_SOURCE_FILES} ${HCL_SDL_FILES})
 target_link_libraries (hcl ${EXTRA_LIBS} m)

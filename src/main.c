@@ -100,9 +100,16 @@ int main(int argc, char **argv)
 	}
 	if(desktopFS)
 	{
+		#ifdef _SDL2
+		SDL_DisplayMode infos;
+		SDL_GetCurrentDisplayMode(0, &infos);
+		screenH = infos.w;
+		screenW = infos.h;
+		#else
 		const SDL_VideoInfo* infos = SDL_GetVideoInfo();
 		screenH = infos->current_h;
 		screenW = infos->current_w;
+		#endif
 		if(screenW/320 < screenH/240)
 			screenScale = screenW/320;
 		else

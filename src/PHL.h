@@ -26,10 +26,17 @@ PHL stands for Portable Homebrew Library
 #endif
 
 #ifdef _SDL
-	#include "sdl/system.h"
-	#include "sdl/graphics.h"
-	#include "sdl/input.h"
-	#include "sdl/audio.h"
+	#ifdef _SDL2
+		#include "sdl2/system.h"
+		#include "sdl2/graphics.h"
+		#include "sdl2/input.h"
+		#include "sdl2/audio.h"
+	#else
+		#include "sdl/system.h"
+		#include "sdl/graphics.h"
+		#include "sdl/input.h"
+		#include "sdl/audio.h"
+	#endif
 #endif
 
 typedef struct {

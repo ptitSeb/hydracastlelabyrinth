@@ -8,6 +8,8 @@ void Input_KeyEvent(SDL_Event* evt);
 void Input_JoyEvent(SDL_Event* evt);
 void Input_JoyAxisEvent(SDL_Event* evt);
 void Input_JoyHatEvent(SDL_Event* evt);
+void Input_ControlButtonEvent(SDL_Event* evt);
+void Input_ControlAxisEvent(SDL_Event* evt);
 
 int PHL_MainLoop()
 {
@@ -31,6 +33,13 @@ int PHL_MainLoop()
             case SDL_JOYBUTTONDOWN:
             case SDL_JOYBUTTONUP:
                 Input_JoyEvent(&evt);
+                break;
+            case SDL_CONTROLLERAXISMOTION:
+                Input_ControlAxisEvent(&evt);
+                break;
+            case SDL_CONTROLLERBUTTONDOWN:
+            case SDL_CONTROLLERBUTTONUP:
+                Input_ControlButtonEvent(&evt);
                 break;
         }
     }

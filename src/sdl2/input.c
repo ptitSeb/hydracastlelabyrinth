@@ -20,6 +20,7 @@ int jStart = 0, jSelect = 0;
 int jAccept = 0, jDecline = 0;
 
 SDL_Joystick *joy1 = NULL;
+SDL_GameController *controller = NULL;
 
 int useJoystick = 1;
 
@@ -27,11 +28,19 @@ void Input_InitJoystick()
 {
 	int n = SDL_NumJoysticks();
 	if (n) {
-		joy1 = SDL_JoystickOpen(0);
-		SDL_JoystickEventState(SDL_ENABLE);
-		printf("Using %s\n", SDL_JoystickName(0));
+		if(SDL_IsGameController(0)) {
+			controller = SDL_GameControllerOpen(0);
+			SDL_GameControllerEventState(SDL_ENABLE);
+			const char *name = SDL_GameControllerNameForIndex(0);
+			printf("Using controller %s\n", name?name:"with no name");
+		} else {
+			joy1 = SDL_JoystickOpen(0);
+			SDL_JoystickEventState(SDL_ENABLE);
+			printf("Using %s\n", SDL_JoystickName(0));
+		}
 	} else {
 		joy1 = NULL;
+		controller = NULL;
 	}
 }
 
@@ -40,6 +49,9 @@ void Input_CloseJoystick()
 	if(joy1)
 		SDL_JoystickClose(joy1);
 	joy1 = NULL;
+	if(controller)
+		SDL_GameControllerClose(controller);
+	controller = NULL;
 }
 
 void Input_KeyEvent(SDL_Event* evt)
@@ -153,6 +165,43 @@ void Input_JoyHatEvent(SDL_Event* evt) {
 	jDown = v&SDL_HAT_DOWN;
 	jLeft = v&SDL_HAT_LEFT;
 	jRight = v&SDL_HAT_RIGHT;
+}
+
+void Input_ControlButtonEvent(SDL_Event* evt) {
+	if(evt->cbutton.which!=0)
+		return;
+	int w = (evt->cbutton.state==SDL_PRESSED)?1:0;
+	switch(evt->cbutton.button)
+	{
+		case SDL_CONTROLLER_BUTTON_A:	jFaceDown = w; break;
+		case SDL_CONTROLLER_BUTTON_B: 	jFaceLeft = w; break;
+		case SDL_CONTROLLER_BUTTON_X: 	jFaceRight = w; break;
+		case SDL_CONTROLLER_BUTTON_Y: 	jFaceUp = w; break;
+		case SDL_CONTROLLER_BUTTON_LEFTSHOULDER: jL = w; break;
+		case SDL_CONTROLLER_BUTTON_RIGHTSHOULDER: jR = w; break;
+		case SDL_CONTROLLER_BUTTON_BACK: jSelect = w; break;
+		case SDL_CONTROLLER_BUTTON_START: jStart = w; break;
+		case SDL_CONTROLLER_BUTTON_DPAD_UP: jUp = w; break;
+		case SDL_CONTROLLER_BUTTON_DPAD_DOWN: jDown = w; break;
+		case SDL_CONTROLLER_BUTTON_DPAD_LEFT: jLeft = w; break;
+		case SDL_CONTROLLER_BUTTON_DPAD_RIGHT: jRight = w; break;
+	}
+}
+void Input_ControlAxisEvent(SDL_Event* evt) {
+	if(evt->caxis.which!=0)
+		return;
+	#define DEADZONE 32
+	if(evt->caxis.axis==SDL_CONTROLLER_AXIS_LEFTX) {
+		int v = (evt->caxis.value)/256;
+		if(v>-DEADZONE & v<DEADZONE) axisX = 0;
+		else if(v<0) axisX = -1;
+		else axisX = +1;
+	} else if(evt->caxis.axis==SDL_CONTROLLER_AXIS_LEFTY) {
+		int v = (evt->caxis.value)/256;
+		if(v>-DEADZONE & v<DEADZONE) axisY = 0;
+		else if(v<0) axisY = -1;
+		else axisY = +1;
+	}
 }
 
 void updateKey(Button* btn, int state)

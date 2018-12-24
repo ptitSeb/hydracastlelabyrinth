@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 
+option(GAMESHELL "Set to ON if targeting an GameShell device" ${GAMESHELL})
 option(PANDORA "Set to ON if targeting an OpenPandora device" ${PANDORA})
 option(ODROID "Set to ON if targeting an ODroid device" ${ODROID})
 option(PYRA "Set to ON if targeting an DragonBox Pyra device" ${PANDORA})
@@ -8,7 +9,9 @@ option(USE_CCACHE "Set to ON to use ccache if present in the system" ${USE_CCACH
 
 option(USE_SDL2 "Use SDL2 instead of SDL1.2" ${USE_SDL2})
 
-
+if(GAMESHELL)
+	add_definitions(-DGAMESHELL)
+endif()
 if(PANDORA)
 	add_definitions(-DPANDORA)
 endif()

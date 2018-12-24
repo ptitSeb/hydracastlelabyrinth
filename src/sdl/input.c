@@ -59,16 +59,26 @@ void Input_KeyEvent(SDL_Event* evt)
         case SDLK_RCTRL:    bR = w; break;
         case SDLK_RSHIFT:   bL = w; break;
         case SDLK_LCTRL:    bSelect = w; break;
-		case SDLK_LALT:     bStart = w; break;
+	case SDLK_LALT:     bStart = w; break;
 #elif defined(CHIP)
-		case SDLK_MINUS:        bFaceUp = w; break;
-		case SDLK_o:            bFaceDown = w; break;
-		case SDLK_0:            bFaceLeft = w; break;
-		case SDLK_EQUALS:       bFaceRight = w; break;
-		case SDLK_1:            bR = w; break;
-		case SDLK_2:            bL = w; break;
-		case SDLK_SPACE:        bSelect = w; break;
-		case SDLK_RETURN:       bStart = w; break;
+	case SDLK_MINUS:        bFaceUp = w; break;
+	case SDLK_o:            bFaceDown = w; break;
+	case SDLK_0:            bFaceLeft = w; break;
+	case SDLK_EQUALS:       bFaceRight = w; break;
+	case SDLK_1:            bR = w; break;
+	case SDLK_2:            bL = w; break;
+	case SDLK_SPACE:        bSelect = w; break;
+	case SDLK_RETURN:       bStart = w; break;
+#elif defined(GAMESHELL)
+	case SDLK_i:        bFaceUp = w; break;
+        case SDLK_k:        bFaceDown = w; break; //jump
+        case SDLK_j:        bFaceLeft = w; break; //slash
+        case SDLK_u:        bFaceRight = w; break; //secondary weapon
+	case SDLK_SPACE:        bR = w; break; //switch weapon
+        // case SDLK_w:        bL = w; break; //switch weapon
+	// case SDLK_SPACE:    bSelect = w; break;
+	case SDLK_ESCAPE:   bSelect = w; break;
+        case SDLK_RETURN:   bStart = w; break;
 #else
         case SDLK_e:        bFaceUp = w; break;
         case SDLK_x:        bFaceDown = w; break;
@@ -76,8 +86,8 @@ void Input_KeyEvent(SDL_Event* evt)
         case SDLK_d:        bFaceRight = w; break;
         case SDLK_r:        bR = w; break;
         case SDLK_w:        bL = w; break;
-		case SDLK_SPACE:    bSelect = w; break;
-		case SDLK_ESCAPE:   bSelect = w; break;
+	case SDLK_SPACE:    bSelect = w; break;
+	case SDLK_ESCAPE:   bSelect = w; break;
         case SDLK_RETURN:   bStart = w; break;
 #endif
     }

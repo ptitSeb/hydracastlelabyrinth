@@ -22,8 +22,12 @@ void iniInit()
 	char fullPath[128];
 	{
 		#ifdef _SDL
+		#ifdef __amigaos4__
+		strcpy(fullPath, "PROGDIR:.hydracastlelabyrinth/");
+		#else
 		strcpy(fullPath, getenv("HOME"));
 		strcat(fullPath, "/.hydracastlelabyrinth/");
+		#endif
 		#else
 		strcpy(fullPath, "");
 		#endif
@@ -53,8 +57,12 @@ void saveSettings()
 	char fullPath[128];
 	{
 		#ifdef _SDL
+		#ifdef __amigaos4__
+		strcpy(fullPath, "PROGDIR:.hydracastlelabyrinth/");
+		#else
 		strcpy(fullPath, getenv("HOME"));
 		strcat(fullPath, "/.hydracastlelabyrinth/");
+		#endif
 		#else
 		strcpy(fullPath, "");
 		#endif
@@ -147,8 +155,12 @@ void loadSettings()
 	char fullPath[128];
 	{
 		#ifdef _SDL
+		#ifdef __amigaos4__
+		strcpy(fullPath, "PROGDIR:.hydracastlelabyrinth/");
+		#else
 		strcpy(fullPath, getenv("HOME"));
 		strcat(fullPath, "/.hydracastlelabyrinth/");
+		#endif
 		#else
 		strcpy(fullPath, "");
 		#endif

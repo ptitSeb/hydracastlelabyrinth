@@ -20,8 +20,12 @@ void createSaveLocations()
 		mkdir("sdmc:/3ds/appdata/HydraCastleLabyrinth/map", 0777);
 	#elif defined(_SDL)
 		char buff[4096];
+		#ifdef __amigaos4__
+		strcpy(buff,"PROGDIR:.hydracastlelabyrinth");
+		#else
 		strcpy(buff, getenv("HOME"));
 		strcat(buff, "/.hydracastlelabyrinth");
+		#endif
 		// if exist first?
 		struct stat sb;
 		if(!(stat(buff, &sb)==0 && S_ISDIR(sb.st_mode)))

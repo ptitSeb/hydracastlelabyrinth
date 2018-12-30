@@ -68,11 +68,19 @@ char savemap[4096];
 void game()
 {
 #ifdef _SDL
+	#ifdef __amigaos4__
+	const char* home = "PROGDIR:";
+	#else
 	const char* home = getenv("HOME");
+	#endif
 	if(home) 
 	{
 		strcpy(savename, home);
+		#ifdef __amigaos4__
+		strcat(savename, ".hydracastlelabyrinth/");
+		#else
 		strcat(savename, "/.hydracastlelabyrinth/");
+		#endif
 		strcpy(savemap, savename);
 		strcat(savename, "save.tmp");
 		strcat(savemap, "save.map");

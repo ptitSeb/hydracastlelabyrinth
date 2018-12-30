@@ -4,6 +4,10 @@
 #include "../qda.h"
 #include "graphics.h"
 #include "scale.h"
+#ifdef __amigaos4__
+#include "../amigaos.h"
+#endif
+
 
 SDL_Texture* drawbuffer = NULL;
 SDL_Texture* screen = NULL;
@@ -204,6 +208,9 @@ PHL_Surface PHL_LoadBMP(int index)
 		//Read data from header
 		memcpy(&w, &QDAFile[18], 2);
 		memcpy(&h, &QDAFile[22], 2);
+		#ifdef __amigaos4__
+		BE16(&w); BE16(&h);
+		#endif
 		
         surf = PHL_NewSurface(w * screenScale, h * screenScale);
 		//surf = PHL_NewSurface(200, 200);

@@ -11,5 +11,5 @@ inline void littleBigEndian (void *x, int sz) {
 	}
 }
 
-inline void BE16(uint16_t* w) {littleBigEndian(&w, 2);}
-inline void BE32(uint32_t* i) {littleBigEndian(&i, 4);}
+inline void BE16(uint16_t* w) {littleBigEndian(w, 2);}
+inline void BE32(uint32_t* i) {littleBigEndian(i, 4);}

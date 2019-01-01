@@ -26,6 +26,7 @@ int useJoystick = 1;
 
 void Input_InitJoystick()
 {
+	SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER | SDL_INIT_JOYSTICK);
 	int n = SDL_NumJoysticks();
 	if (n) {
 		if(SDL_IsGameController(0)) {
@@ -96,6 +97,8 @@ void Input_KeyEvent(SDL_Event* evt)
 }
 
 void Input_JoyAxisEvent(SDL_Event* evt) {
+	if(controller)
+		return;
 	if(evt->jaxis.which!=0)
 		return;
 	#define DEADZONE 32
@@ -114,6 +117,8 @@ void Input_JoyAxisEvent(SDL_Event* evt) {
 }
 
 void Input_JoyEvent(SDL_Event* evt) {
+	if(controller)
+		return;
 	if(evt->jbutton.which!=0)
 		return;
 	int w = (evt->type==SDL_JOYBUTTONDOWN)?1:0;
@@ -156,6 +161,8 @@ void Input_JoyEvent(SDL_Event* evt) {
 }
 
 void Input_JoyHatEvent(SDL_Event* evt) {
+	if(controller)
+		return;
 	if(evt->jhat.which!=0)
 		return;
 	if(evt->jhat.hat!=0)

@@ -934,6 +934,8 @@ void loadScreen()
 		strcpy(dest, "");
 		#ifdef _3DS
 			strcat(dest, "romfs:/map/");
+		#elif defined(__amigaos4__)
+			strcat(dest, "PROGDIR:data/map/");
 		#elif defined(_SDL)
 			strcat(dest, "data/map/");
 		#else
@@ -1027,6 +1029,8 @@ void loadScreen()
 	char dest[30];
 	#ifdef _3DS
 		strcpy(dest, "romfs:/obj/");
+	#elif defined(__amigaos4__)
+		strcpy(dest, "PROGDIR:data/obj/");
 	#elif defined(_SDL)
 		strcpy(dest, "data/obj/");
 	#else

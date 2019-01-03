@@ -8,6 +8,10 @@
 #include <X11/Xlib.h>
 #endif
 
+#ifdef __amigaos4__
+static const char* __attribute__((used)) stackcookie = "$STACK: 1000000";
+#endif
+
 void createSaveLocations()
 {	
 	//Force create save data folders	

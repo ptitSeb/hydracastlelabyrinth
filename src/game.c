@@ -1432,11 +1432,15 @@ int writeSave(char* fname)
 		int size = 4548;
 		unsigned char* memblock = (unsigned char*)malloc(size);
 		memset(memblock, 0, size);
-		
-		memblock[0x0] = herohp;
-		memblock[0x4] = maxhp;
-		memblock[0x8] = heroAmmo;
-		memblock[0x0C] = maxAmmo;
+		#ifdef __amigaos4__
+		#define D 3
+		#else
+		#define D 0
+		#endif
+		memblock[0x0+D] = herohp;
+		memblock[0x4+D] = maxhp;
+		memblock[0x8+D] = heroAmmo;
+		memblock[0x0C+D] = maxAmmo;
 		
 		if (heroWeapon == -1) {
 			memblock[0x10] = 0;
@@ -1473,15 +1477,15 @@ int writeSave(char* fname)
 		memcpy(&memblock[0x11B4], &writeHeroy, 4);
 		
 		if (getHeroDirection() == 1) {
-			memblock[0x11C0] = 0;
+			memblock[0x11C0+D] = 0;
 		}else{
-			memblock[0x11C0] = 1;
+			memblock[0x11C0+D] = 1;
 		}
 		
-		memblock[0x11B8] = level;
+		memblock[0x11B8+D] = level;
 		
 		//Screen
-		memblock[0x11BC] = (screenX) + (screenY * 12);
+		memblock[0x11BC+D] = (screenX) + (screenY * 12);
 		
 		//Time
 		memcpy(&memblock[0x11AC], &playTime, 4);
@@ -1592,6 +1596,7 @@ void loadSave(char* fname)
 			setHeroDirection(-1);
 		}		
 		fclose(f);
+		#undef D
 	}
 	
 }

@@ -122,41 +122,16 @@ void Input_JoyEvent(SDL_Event* evt) {
 	if(evt->jbutton.which!=0)
 		return;
 	int w = (evt->type==SDL_JOYBUTTONDOWN)?1:0;
-/* XBox 360 based mapping here,
-	btn 		SDL1.2	SDL2.0
-	---------------------------
-	A			0		10
-	B			1		11
-	X			2		12
-	Y			3		13
-	Home		N/A	14
-	LB			4		8
-	RB			5		9
-	LT			N/A		N/A (axis)
-	RT			N/A		N/A (axis)
-	Select		6		5
-	Start		7		4
-	L3			9		6
-	R3			10		7
-	DPad Up		N/A		0
-	DPad Down	N/A		1
-	DPad Left	N/A		2
-	DPad Right	N/A		3
-*/
 	switch(evt->jbutton.button)
 	{
-		case 10: jFaceDown = w; break;
-		case 11: jFaceLeft = w; break;
-		case 12: jFaceRight = w; break;
-		case 13: jFaceUp = w; break;
-		case  8: jL = w; break;
-		case  9: jR = w; break;
-		case  5: jSelect = w; break;
-		case  4: jStart = w; break;
-		case  0: jUp = w; break;
-		case  1: jDown = w; break;
-		case  2: jLeft = w; break;
-		case  3: jRight = w; break;
+		case  0: jFaceDown = w; break;
+		case  1: jFaceLeft = w; break;
+		case  2: jFaceRight = w; break;
+		case  3: jFaceUp = w; break;
+		case  4: jL = w; break;
+		case  5: jR = w; break;
+		case  6: jSelect = w; break;
+		case  7: jStart = w; break;
 	}
 }
 
@@ -194,16 +169,23 @@ void Input_ControlButtonEvent(SDL_Event* evt) {
 		case SDL_CONTROLLER_BUTTON_DPAD_RIGHT: jRight = w; break;
 	}
 }
+#ifdef __amigaos4__
+#define STICK_X SDL_CONTROLLER_AXIS_RIGHTX
+#define STICK_Y SDL_CONTROLLER_AXIS_RIGHTY
+#else
+#define STICK_X SDL_CONTROLLER_AXIS_LEFTX
+#define STICK_Y SDL_CONTROLLER_AXIS_LEFTY
+#endif
 void Input_ControlAxisEvent(SDL_Event* evt) {
 	if(evt->caxis.which!=0)
 		return;
 	#define DEADZONE 32
-	if(evt->caxis.axis==SDL_CONTROLLER_AXIS_LEFTX) {
+	if(evt->caxis.axis==STICK_X) {
 		int v = (evt->caxis.value)/256;
 		if(v>-DEADZONE & v<DEADZONE) axisX = 0;
 		else if(v<0) axisX = -1;
 		else axisX = +1;
-	} else if(evt->caxis.axis==SDL_CONTROLLER_AXIS_LEFTY) {
+	} else if(evt->caxis.axis==STICK_Y) {
 		int v = (evt->caxis.value)/256;
 		if(v>-DEADZONE & v<DEADZONE) axisY = 0;
 		else if(v<0) axisY = -1;

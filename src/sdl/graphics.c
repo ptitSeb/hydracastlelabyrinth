@@ -40,8 +40,8 @@ void setXBRZ(int active)
 	xbrz = active;
 
 	// try to reload everything, but boss ressource will not be reloaded
-	freeResources();
-	loadResources();
+	freeImages();
+	loadImages();
 }
 
 

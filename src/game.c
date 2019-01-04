@@ -189,10 +189,9 @@ void game()
 	//Deinit services
 	PHL_Deinit();
 }
-	
-void loadResources()
-{	
-	//Loading Images
+
+void loadImages()
+{
 	images[imgTiles] 		= PHL_LoadQDA(tilesetStrings[level]);
 	images[imgEnemies] 		= PHL_LoadQDA("ene01.bmp");
 	images[imgHud] 			= PHL_LoadQDA("status.bmp");
@@ -210,6 +209,12 @@ void loadResources()
 	//images[imgHud].colorKey = PHL_NewRGB(0, 0, 0);
 	//PHL_SetColorKey(images[imgHud], 0, 0, 0);
 	images[imgTitle01] 		= PHL_LoadQDA("title01.BMP");
+}
+	
+void loadResources()
+{	
+	//Loading Images
+	loadImages();
 
 	//Load Sounds	
 	sounds[sndBee01] 	= PHL_LoadSound("wav/bee01.wav");	
@@ -261,6 +266,16 @@ void loadResources()
 	bgmGameover = PHL_LoadMusic("midi/gameover", 0);
 }
 
+void freeImages()
+{
+	int i;
+
+	//Free graphics
+	for (i = 0; i < NumOfImages; i++) {
+		PHL_FreeSurface(images[i]);
+	}
+}
+
 void freeResources()
 {
 	//Free sounds
@@ -274,10 +289,7 @@ void freeResources()
 	PHL_FreeMusic(bgmGameover);
 	PHL_FreeMusic(bgmSecret);
 
-	//Free graphics
-	for (i = 0; i < NumOfImages; i++) {
-		PHL_FreeSurface(images[i]);
-	}
+	freeImages();
 }
 
 void gameSetup()

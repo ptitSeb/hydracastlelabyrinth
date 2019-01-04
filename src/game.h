@@ -186,6 +186,8 @@ extern char savemap[4096];
 #endif
 
 
+void loadImages();
+void freeImages();
 void loadResources();
 void freeResources();
 

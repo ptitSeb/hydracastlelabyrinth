@@ -68,7 +68,7 @@ char savemap[4096];
 void game()
 {
 #ifdef _SDL
-	#ifdef __amigaos4__
+	#if defined(__amigaos4__) || defined(__MORPHOS__)
 	const char* home = "PROGDIR:";
 	#else
 	const char* home = getenv("HOME");
@@ -76,7 +76,7 @@ void game()
 	if(home) 
 	{
 		strcpy(savename, home);
-		#ifdef __amigaos4__
+		#if defined(__amigaos4__) || defined(__MORPHOS__)
 		strcat(savename, ".hydracastlelabyrinth/");
 		#else
 		strcat(savename, "/.hydracastlelabyrinth/");
@@ -946,7 +946,7 @@ void loadScreen()
 		strcpy(dest, "");
 		#ifdef _3DS
 			strcat(dest, "romfs:/map/");
-		#elif defined(__amigaos4__)
+		#elif defined(__amigaos4__) || defined(__MORPHOS__)
 			strcat(dest, "PROGDIR:data/map/");
 		#elif defined(_SDL)
 			strcat(dest, "data/map/");
@@ -1041,7 +1041,7 @@ void loadScreen()
 	char dest[30];
 	#ifdef _3DS
 		strcpy(dest, "romfs:/obj/");
-	#elif defined(__amigaos4__)
+	#elif defined(__amigaos4__) || defined(__MORPHOS__)
 		strcpy(dest, "PROGDIR:data/obj/");
 	#elif defined(_SDL)
 		strcpy(dest, "data/obj/");
@@ -1444,7 +1444,7 @@ int writeSave(char* fname)
 		int size = 4548;
 		unsigned char* memblock = (unsigned char*)malloc(size);
 		memset(memblock, 0, size);
-		#ifdef __amigaos4__
+		#if defined(__amigaos4__) || defined(__MORPHOS__)
 		#define D 3
 		#else
 		#define D 0

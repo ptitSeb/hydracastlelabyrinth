@@ -4,6 +4,9 @@
 #include "../qda.h"
 #include "graphics.h"
 #include "scale.h"
+#if defined(__amigaos4__) || defined(__MORPHOS__)
+#include "amigaos.h"
+#endif
 
 SDL_Surface* screen = NULL;
 SDL_Surface* drawbuffer = NULL;
@@ -56,8 +59,11 @@ void PHL_GraphicsInit()
 	SDL_ShowCursor(SDL_DISABLE);
 
 	Input_InitJoystick();
-    
-    uint32_t flags = SDL_HWSURFACE|SDL_DOUBLEBUF;
+    	#ifdef __MORPHOS__
+		uint32_t flags = SDL_SWSURFACE;
+	#else
+    		uint32_t flags = SDL_HWSURFACE|SDL_DOUBLEBUF;
+	#endif
 	if(wantFullscreen || desktopFS)
     	flags |= SDL_FULLSCREEN;
     screen = SDL_SetVideoMode((desktopFS)?0:screenW, (desktopFS)?0:screenH, 0, flags);
@@ -174,8 +180,11 @@ PHL_Surface PHL_LoadBMP(int index)
 		//Read data from header
 		memcpy(&w, &QDAFile[18], 2);
 		memcpy(&h, &QDAFile[22], 2);
+		#if defined(__amigaos4__) || defined(__MORPHOS__)
+		BE16(&w); BE16(&h);
+		#endif
 		
-        surf = PHL_NewSurface(w * screenScale, h * screenScale);
+        	surf = PHL_NewSurface(w * screenScale, h * screenScale);
 		//surf = PHL_NewSurface(200, 200);
 
 		//Load Palette

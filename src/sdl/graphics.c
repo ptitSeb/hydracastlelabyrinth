@@ -74,7 +74,7 @@ void PHL_GraphicsInit()
 		deltaY = (screenH-240*screenScale)/2;
 	}
 	
-	SDL_WM_SetCaption("Hydra Caslte Labyrinth", NULL);
+	SDL_WM_SetCaption("Hydra Castle Labyrinth", NULL);
 	
 	drawbuffer = screen;
 	drawscreen = 1;

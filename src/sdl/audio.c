@@ -6,7 +6,9 @@ int music_volume = 4;
 void PHL_AudioInit()
 {
     SDL_InitSubSystem(SDL_INIT_AUDIO);
+    #ifndef __MORPHOS__
     Mix_Init(0);
+    #endif
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
 
     PHL_MusicVolume(0.25f * music_volume);
@@ -15,7 +17,9 @@ void PHL_AudioInit()
 void PHL_AudioClose()
 {
     Mix_CloseAudio();
+    #ifndef __MORPHOS__
     Mix_Quit();
+    #endif
 }
 
 //Same as PHL_LoadSound, but expects a file name without extension

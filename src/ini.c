@@ -22,7 +22,7 @@ void iniInit()
 	char fullPath[128];
 	{
 		#ifdef _SDL
-		#ifdef __amigaos4__
+		#if defined(__amigaos4__) || defined(__MORPHOS__)
 		strcpy(fullPath, "PROGDIR:.hydracastlelabyrinth/");
 		#else
 		strcpy(fullPath, getenv("HOME"));
@@ -57,7 +57,7 @@ void saveSettings()
 	char fullPath[128];
 	{
 		#ifdef _SDL
-		#ifdef __amigaos4__
+		#if defined(__amigaos4__) || defined(__MORPHOS__)
 		strcpy(fullPath, "PROGDIR:.hydracastlelabyrinth/");
 		#else
 		strcpy(fullPath, getenv("HOME"));
@@ -155,7 +155,7 @@ void loadSettings()
 	char fullPath[128];
 	{
 		#ifdef _SDL
-		#ifdef __amigaos4__
+		#if defined(__amigaos4__) || defined(__MORPHOS__)
 		strcpy(fullPath, "PROGDIR:.hydracastlelabyrinth/");
 		#else
 		strcpy(fullPath, getenv("HOME"));

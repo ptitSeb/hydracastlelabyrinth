@@ -11,6 +11,9 @@
 #ifdef __amigaos4__
 static const char* __attribute__((used)) stackcookie = "$STACK: 1000000";
 #endif
+#ifdef __MORPHOS__
+unsigned long __stack = 1000000;
+#endif
 
 void createSaveLocations()
 {	
@@ -24,7 +27,7 @@ void createSaveLocations()
 		mkdir("sdmc:/3ds/appdata/HydraCastleLabyrinth/map", 0777);
 	#elif defined(_SDL)
 		char buff[4096];
-		#ifdef __amigaos4__
+		#if defined(__amigaos4__) || defined(__MORPHOS__)
 		strcpy(buff,"PROGDIR:.hydracastlelabyrinth");
 		#else
 		strcpy(buff, getenv("HOME"));

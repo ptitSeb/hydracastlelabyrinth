@@ -5,7 +5,7 @@
 #include "graphics.h"
 #include "scale.h"
 #if defined(__amigaos4__) || defined(__MORPHOS__)
-#include "amigaos.h"
+#include "../amigaos.h"
 #endif
 
 SDL_Surface* screen = NULL;

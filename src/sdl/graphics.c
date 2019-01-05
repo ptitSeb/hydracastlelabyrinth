@@ -73,6 +73,9 @@ void PHL_GraphicsInit()
 		deltaX = (screenW-320*screenScale)/2;
 		deltaY = (screenH-240*screenScale)/2;
 	}
+	
+	SDL_WM_SetCaption("Hydra Caslte Labyrinth", NULL);
+	
 	drawbuffer = screen;
 	drawscreen = 1;
 	backbuffer = SDL_CreateRGBSurface(0, 320*screenScale, 240*screenScale, 32, 0, 0, 0, 0);

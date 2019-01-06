@@ -114,8 +114,8 @@ int main(int argc, char **argv)
 		#ifdef _SDL2
 		SDL_DisplayMode infos;
 		SDL_GetCurrentDisplayMode(0, &infos);
-		screenH = infos.w;
-		screenW = infos.h;
+		screenW = infos.w;
+		screenH = infos.h;
 		#else
 		const SDL_VideoInfo* infos = SDL_GetVideoInfo();
 		screenH = infos->current_h;

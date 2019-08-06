@@ -17,6 +17,7 @@ int PHL_MainLoop()
         switch(evt.type)
         {
             case SDL_QUIT:
+                quitGame = 1;
                 return 0;
             case SDL_KEYDOWN:
             case SDL_KEYUP:

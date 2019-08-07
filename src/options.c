@@ -7,6 +7,22 @@
 char page = 0;
 int optCursor = 0;
 int lastOption = -1;
+#ifdef _SDL
+int musicType = 1;
+int getMusicType()
+{
+	return musicType;
+}
+void setMusicType(int t)
+{
+	if(t!=musicType)
+	{
+		musicType = t;
+		// restart music...
+	}
+}
+#endif
+
 
 int options(int only)
 {
@@ -153,13 +169,20 @@ int optionsStep()
 			#endif
 
 			#ifdef _SDL
-				// Music volume
+				// Music type
 				if(optCursor == 2) {
+					if(getMusicType()  == 0)
+						setMusicType(1);
+					else
+						setMusicType(0);
+				}
+				// Music volume
+				if(optCursor == 3) {
 					music_volume = (music_volume+1)%5;
 					PHL_MusicVolume(0.25f * music_volume);
 				}
 				// xBRZ
-				if (optCursor == 3) {
+				if (optCursor == 4) {
 					if (getXBRZ() == 0) {
 						setXBRZ(1);
 					}else{
@@ -275,6 +298,16 @@ void optionsDraw()
 		#endif
 
 		#ifdef _SDL
+			// Music type
+			PHL_DrawTextBold("MUSIC", xleft, ydraw, YELLOW);
+			if (getMusicType() == 1) {
+				PHL_DrawTextBold("OGG", xright, ydraw, YELLOW);
+			}
+			else{
+				PHL_DrawTextBold("MIDI", xright, ydraw, YELLOW);
+			}
+			ydraw += ystep;
+			optioncount++;
 			// Music volume
 			PHL_DrawTextBold("MUSIC", xleft, ydraw, YELLOW);
 			char buff[50];

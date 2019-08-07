@@ -1,4 +1,5 @@
 #include "audio.h"
+#include "options.h"
 #include <SDL/SDL.h>
 
 int music_volume = 4;
@@ -7,7 +8,7 @@ void PHL_AudioInit()
 {
     SDL_InitSubSystem(SDL_INIT_AUDIO);
     #ifndef __MORPHOS__
-    Mix_Init(0);
+    Mix_Init(MIX_INIT_OGG); // midi is on by default
     #endif
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
 
@@ -30,7 +31,7 @@ PHL_Music PHL_LoadMusic(char* fname, int loop)
     char buff[4096];
     strcpy(buff, "data/");
     strcat(buff, fname);
-    strcat(buff, ".mid");
+    strcat(buff, getMusicType()?".ogg":".mid");
     ret.snd = Mix_LoadMUS(buff);
     return ret;
 }

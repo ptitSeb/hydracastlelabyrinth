@@ -1,0 +1,8 @@
+.gdb_history
+.vscode/
+CMakeFiles/
+Makefile
+CMakeCache.txt
+cmake_install.cmake
+/build/
+hcl

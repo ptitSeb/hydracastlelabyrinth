@@ -30,7 +30,7 @@ cmake . -DUSE_SDL2=ON
 make
 ```
 
-To hear music, you need timidity
+To hear music, you can optionnaly use timidity, but it will play OGG track by default.
 ```
 sudo apt install timidity
 ```

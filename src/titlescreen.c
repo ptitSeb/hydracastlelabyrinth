@@ -65,7 +65,7 @@ int titleScreenStep()
 	//Move cursor
 	if (btnDown.pressed == 1 || btnSelect.pressed == 1) {
 		cursor += 1;
-		if (cursor > 2) {
+		if (cursor > 3) {
 			cursor = 0;
 		}
 		PHL_PlaySound(sounds[sndPi01], 1);
@@ -74,7 +74,7 @@ int titleScreenStep()
 	if (btnUp.pressed == 1) {
 		cursor -= 1;
 		if (cursor < 0) {
-			cursor = 2;
+			cursor = 3;
 		}
 		PHL_PlaySound(sounds[sndPi01], 1);
 	}
@@ -109,6 +109,7 @@ void titleScreenDraw()
 	//Text
 	PHL_DrawTextBold("NEW GAME", 256, 272, YELLOW);
 	PHL_DrawTextBold("LOAD GAME", 248, 304, YELLOW);
-	PHL_DrawTextBold("EXIT", 288, 336, YELLOW);
+	PHL_DrawTextBold("OPTIONS", 264, 336, YELLOW);
+	PHL_DrawTextBold("EXIT", 288, 368, YELLOW);
 	PHL_DrawTextBold("(C) 2011 E.HASHIMOTO", 160, 400, WHITE);
 }

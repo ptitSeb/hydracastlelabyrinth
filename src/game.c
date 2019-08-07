@@ -105,10 +105,19 @@ void game()
 		int titleScreenResult = titleScreen();
 
 		//Exit game
-		if (titleScreenResult == 2) {
+		if (titleScreenResult == 3) {
 			PHL_GameQuit();
 		}
 
+		// Options
+		else if(titleScreenResult == 2) {
+			int optionsResult = options(1);
+			
+			//Exit Game
+			if (optionsResult == 3) {
+				PHL_GameQuit();
+			}
+		}
 		//Game Start
 		else{
 			//Reset game state
@@ -385,7 +394,7 @@ int gameStep()
 		if (getHeroState() <= 5 && cutInTimer <= 0) {
 			if (btnSelect.pressed == 1)
 			{						
-				int optionsResult = options();
+				int optionsResult = options(0);
 				
 				//Reset Game
 				if (optionsResult == 1) {
@@ -708,7 +717,7 @@ void gameEnding()
 		}
 		
 		//Calculate time		
-		char timeString[9];
+		char timeString[12];
 		{
 			int hours = playTime / 216000;
 			int minutes = (playTime % 216000) / 3600;

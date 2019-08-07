@@ -8,13 +8,15 @@ char page = 0;
 int optCursor = 0;
 int lastOption = -1;
 
-int options()
+int options(int only)
 {
 	char tempDark = roomDarkness;
 	roomDarkness = 0;
 	
 	int result = -1;
 	char loop = 1;
+
+	if(only) page=1;
 	
 	while (PHL_MainLoop() && loop == 1)
 	{
@@ -28,6 +30,9 @@ int options()
 		PHL_EndDrawing();
 		
 		if (page == 0 && result != -1 && result != 2) {
+			loop = 0;
+		}
+		if (only && page==0) {
 			loop = 0;
 		}
 	}

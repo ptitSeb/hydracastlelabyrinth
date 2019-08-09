@@ -1,5 +1,9 @@
 #include "input.h"
+#ifdef EMSCRIPTEN
+#include <SDL.h>
+#else
 #include <SDL2/SDL.h>
+#endif
 
 Button btnUp = {0}, btnDown = {0}, btnLeft = {0}, btnRight = {0};
 Button btnFaceUp = {0}, btnFaceDown = {0}, btnFaceLeft = {0}, btnFaceRight = {0};

@@ -197,7 +197,12 @@ void gameSetup();
 void gameCleanup();
 
 void enterDoor();
+#ifdef EMSCRIPTEN
+void getItemSetup(int itemNum);
+int getItemEMStep();
+#else
 void getItem(int itemNum);
+#endif
 void saveScreen();
 
 void gameEnding();

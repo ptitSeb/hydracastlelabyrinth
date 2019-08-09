@@ -11,6 +11,30 @@ void titleScreenSetup();
 int titleScreenStep();
 void titleScreenDraw();
 
+#ifdef EMSCRIPTEN
+int titleEMStep()
+{
+	PHL_MainLoop();
+	//Get input
+	PHL_ScanInput();
+	
+	//Titlescreen step
+	int result = titleScreenStep();
+	
+	//Draw titlescreen
+	PHL_StartDrawing();
+		
+	titleScreenDraw();
+
+	if (result != -1)
+		PHL_DrawRect(0, 0, 640, 480, PHL_NewRGB(0, 0, 0));
+
+	PHL_EndDrawing();		
+
+	return result;
+}
+#endif
+
 int titleScreen()
 {
 	titleScreenSetup();

@@ -6,6 +6,37 @@
 int cursorX = 0;
 int cursorY = 0;
 
+#ifdef EMSCRIPTEN
+static char tempDark;
+void inventorySetup()
+{
+	tempDark = roomDarkness;
+	roomDarkness = 0;
+	
+	PHL_PlaySound(sounds[sndPi04], CHN_SOUND);
+}
+int inventoryEMStep()
+{
+	int result = -1;
+	PHL_MainLoop();
+
+	PHL_StartDrawing();
+	PHL_ScanInput();
+	
+	if (inventoryStep() == 1) {
+		result = 0;
+	}
+	
+	inventoryDraw();
+	
+	PHL_EndDrawing();
+	
+	if(!result)
+		roomDarkness = tempDark;
+	return result;
+}
+#else
+
 void inventory()
 {
 	char tempDark = roomDarkness;
@@ -29,7 +60,7 @@ void inventory()
 	
 	roomDarkness = tempDark;
 }
-
+#endif
 int inventoryStep()
 {		
 	secretCountdown();

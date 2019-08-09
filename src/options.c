@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "options.h"
 #include "PHL.h"
 #include "game.h"
@@ -23,6 +24,43 @@ void setMusicType(int t)
 }
 #endif
 
+#ifdef EMSCRIPTEN
+static char tempDark;
+static int emOnly;
+void optionsSetup(int only)
+{
+	tempDark = roomDarkness;
+	roomDarkness = 0;
+	emOnly = only;
+	page = only?1:0;
+}
+
+int optionsEMStep()
+{
+	int loop = 1;
+	PHL_MainLoop();
+
+	PHL_StartDrawing();
+	
+	optionsDraw();
+	
+	PHL_ScanInput();	
+	int result = optionsStep();
+	
+	PHL_EndDrawing();
+	
+	if (page == 0 && result != -1 && result != 2) {
+		loop = 0;
+	}
+	if (emOnly && page==0) {
+		loop = 0;
+	}
+
+	if(!loop) roomDarkness = tempDark;
+	
+	return (!loop)?result:-1;
+}
+#else
 
 int options(int only)
 {
@@ -57,7 +95,7 @@ int options(int only)
 	
 	return result;
 }
-
+#endif
 int optionsStep()
 {		
 	int result = -1;

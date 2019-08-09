@@ -458,6 +458,9 @@ void createChest(int x, int y, int item, int secret)
 	}
 }
 
+#ifdef EMSCRIPTEN
+extern int em_state;
+#endif
 void chestStep(Chest* c)
 {
 	if (c->visible == 1) {
@@ -503,8 +506,12 @@ void chestStep(Chest* c)
 				int saveItem = c->item;
 				
 				objectDestroy(c->id);
-				
+				#ifdef EMSCRIPTEN
+				getItemSetup(saveItem);
+				em_state = 50;
+				#else
 				getItem(saveItem);
+				#endif
 			}
 		}
 	}

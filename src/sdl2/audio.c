@@ -1,6 +1,8 @@
 #include "audio.h"
 #include "../options.h"
 #include <SDL2/SDL.h>
+#include <stdio.h>
+#include <string.h>
 
 int music_volume = 4;
 

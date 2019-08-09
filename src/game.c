@@ -13,6 +13,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifdef EMSCRIPTEN
+#include <emscripten.h>
+#endif
 
 int gameStep();
 void gameDraw(char doDrawHud);
@@ -65,6 +68,126 @@ char savename[4096];
 char savemap[4096];
 #endif
 
+#ifdef EMSCRIPTEN
+int em_state = 0;
+void em_loop_fn(void* arg)
+{
+	if(!PHL_MainLoop()) {
+        emscripten_cancel_main_loop();
+	}
+
+	int result;
+	switch (em_state) {
+		case 0:	titleScreenSetup();
+				++em_state;
+				break;
+		case 1: result = titleEMStep();
+				if (result == 2) {
+					emscripten_cancel_main_loop();
+				} else if(result!=-1) {
+					if(result==2) 
+						em_state = 60;
+					else {
+						//Reset game state
+						gameSetup();
+						
+						//Load Game
+						if (result == 1)
+						{
+							if (fileExists(savename) == 1) {
+								loadSave(savename);
+							}else if (fileExists(savemap) == 1) {
+								loadSave(savemap);					
+							}
+						}
+						++em_state;
+					}
+				}
+				break;
+		case 2:
+				//Update resources, depending on level
+				loadUncommonImages();
+				PHL_FreeSurface(images[imgTiles]);
+				images[imgTiles] = PHL_LoadQDA(tilesetStrings[level]);
+				
+				PHL_FreeMusic(bgmMusic);
+				bgmMusic = PHL_LoadMusic(musicStrings[level], 1);
+
+				loadScreen();
+				em_state = 10;
+				break;
+		case 10:	// main game loop
+				PHL_MainLoop();
+				PHL_ScanInput();	
+				result = gameStep();
+				if(!result)
+					em_state = 20;
+				else {
+					if(result!=-1)
+						em_state = result;
+					else {
+						PHL_StartDrawing();					
+						gameDraw(1);					
+						PHL_EndDrawing();
+					}
+				}
+				break;
+		case 20:	// game ended
+			roomDarkness = 0;	
+			freeArrays();
+			
+			//Erase temp save if it exists
+			if (fileExists(savename))
+			{
+				remove(savename);
+			}
+			em_state = 0;
+			break;
+		case 30:	// option menu
+				optionsSetup(0);
+				++em_state;
+				// fall thru
+		case 31:
+				result = optionsEMStep();
+				
+				//Reset Game
+				if (result == 1)
+					em_state = 20;
+				//Exit Game
+				if (result == 3) {
+					emscripten_cancel_main_loop();
+				}
+				if (result!=-1)
+					em_state = 10;
+				break;
+		case 40:
+				inventorySetup();
+				++em_state;
+		case 41:
+				result = inventoryEMStep();
+				if(result==0)
+					em_state = 20;
+				break;
+		case 50:
+				result = getItemEMStep();
+				if(result==0)
+					em_state = 20;
+				break;
+		case 60:	// option menu
+				optionsSetup(1);
+				++em_state;
+				// fall thru
+		case 61:
+				result = optionsEMStep();
+				
+				if (result!=-1)
+					em_state = 0;
+				break;
+	}
+
+}
+#endif
+
 void game()
 {
 #ifdef _SDL
@@ -98,6 +221,10 @@ void game()
 	//Load Resources
 	loadText();	
 	loadResources();
+
+	#ifdef EMSCRIPTEN
+	emscripten_set_main_loop_arg(em_loop_fn, NULL, -1, 1);
+	#else
 
 	while (PHL_MainLoop())
 	{		
@@ -197,6 +324,7 @@ void game()
 	
 	//Deinit services
 	PHL_Deinit();
+	#endif
 }
 
 void loadImages()
@@ -393,7 +521,11 @@ int gameStep()
 	{
 		if (getHeroState() <= 5 && cutInTimer <= 0) {
 			if (btnSelect.pressed == 1)
-			{						
+			{
+				#ifdef EMSCRIPTEN
+				optionsSetup(0);
+				return 31;
+				#else						
 				int optionsResult = options(0);
 				
 				//Reset Game
@@ -405,8 +537,13 @@ int gameStep()
 					PHL_GameQuit();
 					return 1;
 				}
+				#endif
 			}else if (btnStart.pressed == 1) {	
+				#ifdef EMSCRIPTEN
+				return 40;
+				#else
 				inventory();
+				#endif
 			}
 		}
 	}
@@ -560,7 +697,22 @@ void gameDraw(char doDrawHud)
 	}
 	
 }
-
+#ifdef EMSCRIPTEN
+static int em_itemNum;
+static char getItemTimer;
+void getItemSetup(int itemNum)
+{
+	setHeroState(6);
+	setHeroImageIndex(0);
+	
+	char getItemTimer = 0;
+}
+int getItemEMStep()
+{
+	int itemNum = em_itemNum;
+	char loop = 1;
+	PHL_MainLoop();
+#else
 void getItem(int itemNum)
 {
 	setHeroState(6);
@@ -570,6 +722,7 @@ void getItem(int itemNum)
 	char loop = 1;
 	
 	while (PHL_MainLoop() && loop == 1)
+#endif
 	{
 		secretCountdown();
 		//Get Item Step		
@@ -637,6 +790,9 @@ void getItem(int itemNum)
 			PHL_EndDrawing();
 		}
 	}	
+#ifdef EMSCRIPTEN
+	return loop;
+#endif
 }
 
 void saveScreen()

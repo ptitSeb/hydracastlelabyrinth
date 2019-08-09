@@ -27,7 +27,11 @@ void iniInit()
 		#if defined(__amigaos4__) || defined(__MORPHOS__)
 		strcpy(fullPath, "PROGDIR:.hydracastlelabyrinth/");
 		#else
+		#ifdef EMSCRIPTEN
+		strcpy(fullPath, "/home/web_user");
+		#else
 		strcpy(fullPath, getenv("HOME"));
+		#endif
 		strcat(fullPath, "/.hydracastlelabyrinth/");
 		#endif
 		#else
@@ -62,7 +66,11 @@ void saveSettings()
 		#if defined(__amigaos4__) || defined(__MORPHOS__)
 		strcpy(fullPath, "PROGDIR:.hydracastlelabyrinth/");
 		#else
+		#ifdef EMSCRIPTEN
+		strcpy(fullPath, "/home/web_user");
+		#else
 		strcpy(fullPath, getenv("HOME"));
+		#endif
 		strcat(fullPath, "/.hydracastlelabyrinth/");
 		#endif
 		#else
@@ -161,7 +169,11 @@ void loadSettings()
 		#if defined(__amigaos4__) || defined(__MORPHOS__)
 		strcpy(fullPath, "PROGDIR:.hydracastlelabyrinth/");
 		#else
+		#ifdef EMSCRIPTEN
+		strcpy(fullPath, "/home/web_user");
+		#else
 		strcpy(fullPath, getenv("HOME"));
+		#endif
 		strcat(fullPath, "/.hydracastlelabyrinth/");
 		#endif
 		#else

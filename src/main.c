@@ -3,6 +3,9 @@
 #include <stdlib.h>
 #include <time.h>
 #include <sys/stat.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #ifdef ODROID
 #define _XTYPEDEF_MASK
 #include <X11/Xlib.h>

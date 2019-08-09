@@ -1,7 +1,12 @@
 #ifndef OPTIONS_H
 #define OPTIONS_H
 
+#ifdef EMSCRIPTEN
+void optionsSetup(int only);
+int optionsEMStep();
+#else
 int options(int only);
+#endif
 
 int optionsStep();
 void optionsDraw();

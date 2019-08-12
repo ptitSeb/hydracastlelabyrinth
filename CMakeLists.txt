@@ -187,6 +187,6 @@ if(EMSCRIPTEN)
 	add_custom_command(TARGET hcl PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/data $<TARGET_FILE_DIR:hcl>/data)
 	#target_compile_options(hcl "-O2")
 	#target_link_options(hcl PRIVATE USE_SDL=2) #needs cmake 3.13+
-	SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -s USE_SDL=2 -s USE_SDL_MIXER=2 -s WASM=1 --emrun --preload-file data -s ASSERTIONS=1 -s TOTAL_MEMORY=134217728")
+	SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -s USE_SDL=2 -s USE_SDL_MIXER=2 -s WASM=1 --emrun --preload-file data -s ASSERTIONS=1 -s TOTAL_MEMORY=128MB -s ALLOW_MEMORY_GROWTH=1 -s EXIT_RUNTIME=1")
 	#target_link_libraries(hcl "--preload-file" "data")
 endif(EMSCRIPTEN)

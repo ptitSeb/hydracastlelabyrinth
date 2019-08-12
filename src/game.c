@@ -82,8 +82,8 @@ void em_loop_fn(void* arg)
 				++em_state;
 				break;
 		case 1: result = titleEMStep();
-				if (result == 2) {
-					emscripten_cancel_main_loop();
+				if (result == 3) {
+					em_state = 100;
 				} else if(result!=-1) {
 					if(result==2) 
 						em_state = 60;
@@ -153,11 +153,9 @@ void em_loop_fn(void* arg)
 				//Reset Game
 				if (result == 1)
 					em_state = 20;
-				//Exit Game
-				if (result == 3) {
-					emscripten_cancel_main_loop();
-				}
-				if (result!=-1)
+				else if (result == 3) {
+					em_state = 100;
+				} else if (result!=-1)
 					em_state = 10;
 				break;
 		case 40:
@@ -182,6 +180,16 @@ void em_loop_fn(void* arg)
 				
 				if (result!=-1)
 					em_state = 0;
+				break;
+		case 100:
+				//Free Resources
+				textFree();
+				freeResources();
+				
+				//Deinit services
+				PHL_Deinit();
+				// end
+				emscripten_cancel_main_loop();
 				break;
 	}
 

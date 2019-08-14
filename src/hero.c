@@ -30,7 +30,8 @@ int onground = 0;
 int heldUp = 0;
 
 const double GRAVITY = 0.3;
-const double CLIMBSPEED = 1;
+const double CLIMBSPEED = 1.2;
+const double CLIMBSPEEDPOWER = 2.0;
 
 double vsp = 0;
 double hsp = 0;
@@ -565,7 +566,7 @@ int heroStep()
 				{
 					//Has power bracelet
 					if (hasItem[4] == 1) {
-						climbspd *= 2;
+						climbspd = CLIMBSPEEDPOWER;
 					}
 					
 					//Stun slows climb speed

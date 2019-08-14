@@ -201,6 +201,8 @@ void game()
 #ifdef _SDL
 	#if defined(__amigaos4__) || defined(__MORPHOS__)
 	const char* home = "PROGDIR:";
+	#elif defined(EMSCRIPTEN)
+	const char* home = "/home/web_user";
 	#else
 	const char* home = getenv("HOME");
 	#endif
@@ -219,6 +221,7 @@ void game()
 		strcpy(savename, "data/save.tmp");
 		strcpy(savemap, savemap);
 	}
+printf("savename = %s\n");
 #endif
 	//Setup services
 	PHL_Init();

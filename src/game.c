@@ -221,7 +221,6 @@ void game()
 		strcpy(savename, "data/save.tmp");
 		strcpy(savemap, savemap);
 	}
-printf("savename = %s\n");
 #endif
 	//Setup services
 	PHL_Init();

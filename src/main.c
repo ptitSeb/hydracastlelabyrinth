@@ -69,6 +69,8 @@ int main(int argc, char **argv)
 	#endif
 	#ifdef CHIP
 	screenScale = 1;
+	#elif defined(BITTBOY)
+	screenScale = 1;
 	#elif defined(PYRA)
 	//screenScale = 3;
 	desktopFS = 1;
@@ -135,7 +137,7 @@ int main(int argc, char **argv)
 		screenW = 320 * screenScale;
 		screenH = 240 * screenScale;
 	}
-	printf("Hydra Caslte Labyrinth, %s %dx%d scale=x%d%s, using Joystick=%d\n", (wantFullscreen || desktopFS)?"Fullscreen":"Windowed", screenW, screenH, screenScale, getXBRZ()?" xBRZ":"", useJoystick);
+	printf("Hydra Castle Labyrinth, %s %dx%d scale=x%d%s, using Joystick=%d\n", (wantFullscreen || desktopFS)?"Fullscreen":"Windowed", screenW, screenH, screenScale, getXBRZ()?" xBRZ":"", useJoystick);
 	#endif
 	
 	srand(time(NULL));

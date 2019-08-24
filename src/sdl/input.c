@@ -69,6 +69,15 @@ void Input_KeyEvent(SDL_Event* evt)
 	case SDLK_2:            bL = w; break;
 	case SDLK_SPACE:        bSelect = w; break;
 	case SDLK_RETURN:       bStart = w; break;
+#elif defined(BITTBOY)
+	case SDLK_MINUS:        bFaceUp = w; break;
+	case SDLK_LCTRL:        bFaceDown = w; break;	// A - jump
+	case SDLK_SPACE:        bFaceLeft = w; break;	// B - slash
+	case SDLK_LALT:         bFaceRight = w; break;	// TA - secondary
+	case SDLK_LSHIFT:       bR = w; break;			// TB - switch
+	case SDLK_ESCAPE:       bSelect = w; break;		// select - menu
+	case SDLK_RETURN:       bStart = w; break;		// start - inventory
+	case SDLK_RCTRL:        bSelect = w; break;		// reset - menu
 #elif defined(GAMESHELL)
 	case SDLK_i:        bFaceUp = w; break;
         case SDLK_k:        bFaceDown = w; break; //jump

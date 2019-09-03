@@ -42,6 +42,10 @@ To start windowed 640x480 game. You can have fullscreen with `./hcl -f` or `./hc
 
 ![sreenshot on Pandora](screenshot.png "screenshot on Pandora")
 
+# Web Version
+
+You can play an Emscripten version directly on your wrowser here: https://ptitseb.github.io/hydracastlelabyrinth/
+
 # Original Notice
 
 

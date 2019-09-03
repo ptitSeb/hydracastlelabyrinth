@@ -23,6 +23,7 @@ if(EMSCRIPTEN)
 	add_definitions("-s" "USE_SDL_MIXER=2")
 	add_definitions("-s" "ASSERTIONS=1")
 	add_compile_options("-emit-llvm")
+	add_compile_options("-std=c++11")
 	add_definitions("-s" "WASM=1")
 	add_definitions("--preload-file" "data")
 	#should force all def to false

@@ -200,6 +200,7 @@ void em_loop_fn(void* arg)
 					em_state = 0;
 				break;
 		case 100:
+				/*
 				//Free Resources
 				textFree();
 				freeResources();
@@ -208,6 +209,8 @@ void em_loop_fn(void* arg)
 				PHL_Deinit();
 				// end
 				emscripten_cancel_main_loop();
+				*/
+				em_state = 0;	// no quitting, as it make no sense in a browser (just kill the tab)
 				break;
 	}
 

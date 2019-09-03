@@ -89,6 +89,7 @@ void em_loop_fn(void* arg)
 				loadResources();
 				 break;
 		case 0:	
+				PHL_StopMusic();
 				titleScreenSetup();
 				++em_state;
 				break;

@@ -79,7 +79,9 @@ void titleScreenSetup()
 	//Check if temp save file exists
 	tempsave = 0;
 	if ( fileExists(savename) ) {
+		#ifndef EMSCRIPTEN
 		tempsave = 1;
+		#endif
 		cursor = 1;		
 	}
 }

@@ -5,6 +5,9 @@
 #include <stdio.h>
 #include <string.h>
 #include "text.h"
+#ifdef EMSCRIPTEN
+#include <emscripten.h>
+#endif
 
 //char* getFileLocation();
 char* trimString(char* orig);
@@ -26,25 +29,22 @@ void iniInit()
 		#ifdef _SDL
 		#if defined(__amigaos4__) || defined(__MORPHOS__)
 		strcpy(fullPath, "PROGDIR:.hydracastlelabyrinth/");
-		#else
-		#ifdef EMSCRIPTEN
-		strcpy(fullPath, "/home/web_user");
+		#elif defined(EMSCRIPTEN)
+		strcpy(fullPath, "hcl_data/");
 		#else
 		strcpy(fullPath, getenv("HOME"));
-		#endif
 		strcat(fullPath, "/.hydracastlelabyrinth/");
 		#endif
+		#elif defined(_3DS)
+		strcpy(fullPath, "sdmc:/3ds/appdata/HydraCastleLabyrinth/");
 		#else
 		strcpy(fullPath, "");
-		#endif
-		#ifdef _3DS
-			strcat(fullPath, "sdmc:/3ds/appdata/HydraCastleLabyrinth/");
 		#endif
 		strcat(fullPath, "system.ini");
 	}
 	
 	FILE* f;
-	
+
 	if ( (f = fopen(fullPath, "rt")) )
 	{
 		//File exists - read it
@@ -65,19 +65,16 @@ void saveSettings()
 		#ifdef _SDL
 		#if defined(__amigaos4__) || defined(__MORPHOS__)
 		strcpy(fullPath, "PROGDIR:.hydracastlelabyrinth/");
-		#else
-		#ifdef EMSCRIPTEN
-		strcpy(fullPath, "/home/web_user");
+		#elif defined(EMSCRIPTEN)
+		strcpy(fullPath, "hcl_data/");
 		#else
 		strcpy(fullPath, getenv("HOME"));
-		#endif
 		strcat(fullPath, "/.hydracastlelabyrinth/");
 		#endif
+		#elif defined(_3DS)
+		strcpy(fullPath, "sdmc:/3ds/appdata/HydraCastleLabyrinth/");
 		#else
 		strcpy(fullPath, "");
-		#endif
-		#ifdef _3DS
-			strcat(fullPath, "sdmc:/3ds/appdata/HydraCastleLabyrinth/");
 		#endif
 		strcat(fullPath, "system.ini");
 	}
@@ -155,9 +152,13 @@ void saveSettings()
 		#endif
 		fclose(f);
 	}
-	
-	
-	
+	#ifdef EMSCRIPTEN
+	EM_ASM(
+		FS.syncfs(false,function () {
+			Module.print("File sych'd")
+		});
+	);
+	#endif
 }
 
 void loadSettings()
@@ -168,19 +169,16 @@ void loadSettings()
 		#ifdef _SDL
 		#if defined(__amigaos4__) || defined(__MORPHOS__)
 		strcpy(fullPath, "PROGDIR:.hydracastlelabyrinth/");
-		#else
-		#ifdef EMSCRIPTEN
-		strcpy(fullPath, "/home/web_user");
+		#elif defined(EMSCRIPTEN)
+		strcpy(fullPath, "hcl_data/");
 		#else
 		strcpy(fullPath, getenv("HOME"));
-		#endif
 		strcat(fullPath, "/.hydracastlelabyrinth/");
 		#endif
+		#elif defined(_3DS)
+		strcpy(fullPath, "sdmc:/3ds/appdata/HydraCastleLabyrinth/");
 		#else
 		strcpy(fullPath, "");
-		#endif
-		#ifdef _3DS
-			strcat(fullPath, "sdmc:/3ds/appdata/HydraCastleLabyrinth/");
 		#endif
 		strcat(fullPath, "system.ini");
 	}
@@ -236,7 +234,7 @@ void loadSettings()
 			}
 		}
 		fclose(f);
-	}	
+	}
 	
 }
 

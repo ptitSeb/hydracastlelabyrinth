@@ -10,6 +10,9 @@
 #define _XTYPEDEF_MASK
 #include <X11/Xlib.h>
 #endif
+#ifdef EMSCRIPTEN
+#include <emscripten.h>
+#endif
 
 #ifdef __amigaos4__
 static const char* __attribute__((used)) stackcookie = "$STACK: 1000000";
@@ -32,6 +35,8 @@ void createSaveLocations()
 		char buff[4096];
 		#if defined(__amigaos4__) || defined(__MORPHOS__)
 		strcpy(buff,"PROGDIR:.hydracastlelabyrinth");
+		#elif defined(EMSCRIPTEN)
+		strcpy(buff, "hcl_data");
 		#else
 		strcpy(buff, getenv("HOME"));
 		strcat(buff, "/.hydracastlelabyrinth");
@@ -48,10 +53,25 @@ void createSaveLocations()
 	#endif
 }
 
+#ifdef EMSCRIPTEN
+int fileSynched = 0;
+#endif
 
 int main(int argc, char **argv)
 {	
 	//Setup
+	#ifdef EMSCRIPTEN
+	// that HEAP32 on &fileSynched looks like a hack, but I needed a way to be sure the DB is read before reading the ini files
+	EM_ASM_INT({
+		FS.mkdir('hcl_data'); 
+		FS.mount(IDBFS,{},'hcl_data');
+		Module.print("Will import permanent storage");
+		FS.syncfs(true, function() {
+			Module.print("Permanent storage imported");
+			HEAP32[$0>>2] = 1;
+		});
+	}, &fileSynched);
+	#endif
 	#ifdef _3DS
 		sdmcInit();
 		osSetSpeedupEnable(false);

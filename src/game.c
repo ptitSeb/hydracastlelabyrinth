@@ -69,7 +69,8 @@ char savemap[4096];
 #endif
 
 #ifdef EMSCRIPTEN
-int em_state = 0;
+extern int fileSynched;
+int em_state = -2;
 void em_loop_fn(void* arg)
 {
 	if(!PHL_MainLoop()) {
@@ -78,7 +79,17 @@ void em_loop_fn(void* arg)
 
 	int result;
 	switch (em_state) {
-		case 0:	titleScreenSetup();
+		case -2: if(fileSynched) em_state++;
+				 break;
+		case -1: em_state++;
+				// need to delay loading of init to let synchof files happens
+				iniInit();
+				//Load Resources
+				loadText();	
+				loadResources();
+				 break;
+		case 0:	
+				titleScreenSetup();
 				++em_state;
 				break;
 		case 1: result = titleEMStep();
@@ -140,6 +151,13 @@ void em_loop_fn(void* arg)
 			if (fileExists(savename))
 			{
 				remove(savename);
+				#ifdef EMSCRIPTEN
+				EM_ASM(
+					FS.syncfs(false,function () {
+						Module.print("File sych'd")
+					});
+				);
+				#endif
 			}
 			em_state = 0;
 			break;
@@ -202,7 +220,7 @@ void game()
 	#if defined(__amigaos4__) || defined(__MORPHOS__)
 	const char* home = "PROGDIR:";
 	#elif defined(EMSCRIPTEN)
-	const char* home = "/home/web_user";
+	const char* home = "hcl_data/";
 	#else
 	const char* home = getenv("HOME");
 	#endif
@@ -211,7 +229,7 @@ void game()
 		strcpy(savename, home);
 		#if defined(__amigaos4__) || defined(__MORPHOS__)
 		strcat(savename, ".hydracastlelabyrinth/");
-		#else
+		#elif !defined(EMSCRIPTEN)
 		strcat(savename, "/.hydracastlelabyrinth/");
 		#endif
 		strcpy(savemap, savename);
@@ -226,15 +244,15 @@ void game()
 	PHL_Init();
 	initQDA();	
 	textInit();
+	#ifdef EMSCRIPTEN
+	emscripten_set_main_loop_arg(em_loop_fn, NULL, -1, 1);
+	#else
 	iniInit();
 	
 	//Load Resources
 	loadText();	
 	loadResources();
 
-	#ifdef EMSCRIPTEN
-	emscripten_set_main_loop_arg(em_loop_fn, NULL, -1, 1);
-	#else
 
 	while (PHL_MainLoop())
 	{		
@@ -323,6 +341,13 @@ void game()
 				#endif
 				strcat(fullPath, savename);
 				remove(fullPath);
+				#endif
+				#ifdef EMSCRIPTEN
+				EM_ASM(
+					FS.syncfs(false,function () {
+						Module.print("File sych'd")
+					});
+				);
 				#endif
 			}
 		}
@@ -843,6 +868,13 @@ void saveScreen()
 			#endif
 			strcat(fullPath, savename);
 			remove(fullPath);
+			#ifdef EMSCRIPTEN
+			EM_ASM(
+				FS.syncfs(false,function () {
+					Module.print("File sych'd")
+				});
+			);
+			#endif
 		}
 	}
 }
@@ -1684,7 +1716,15 @@ int writeSave(char* fname)
 		result = 1;
 		fclose(f);
 	}
-	
+	#ifdef EMSCRIPTEN
+	EM_ASM(
+		//persist changes
+		FS.syncfs(false,function (err) {
+						assert(!err);
+		});
+	);
+	#endif
+
 	return result;
 }
 

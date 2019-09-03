@@ -67,11 +67,11 @@
                 Module.SDL2.audioContext.resume();
             }
             if (Module.SDL2.audioContext.state == 'running') {
-                document.getElementById('canvas').removeEventListener('click', resumeAudio);
+                $game.removeEventListener('click', resumeAudio);
                 document.removeEventListener('keydown', resumeAudio);
             }
         }
-        document.getElementById('canvas').addEventListener('click', resumeAudio);
+        $game.addEventListener('click', resumeAudio);
         document.addEventListener('keydown', resumeAudio);
     </script>
     <script async type="text/javascript" src="index.js"></script>

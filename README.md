@@ -44,7 +44,7 @@ To start windowed 640x480 game. You can have fullscreen with `./hcl -f` or `./hc
 
 # Web Version
 
-You can play an Emscripten version directly on your wrowser here: https://ptitseb.github.io/hydracastlelabyrinth/
+You can play an Emscripten version directly on your browser here: https://ptitseb.github.io/hydracastlelabyrinth/
 
 # Original Notice
 

@@ -183,12 +183,12 @@ void em_loop_fn(void* arg)
 		case 41:
 				result = inventoryEMStep();
 				if(result==0)
-					em_state = 20;
+					em_state = 10;
 				break;
 		case 50:
 				result = getItemEMStep();
 				if(result==0)
-					em_state = 20;
+					em_state = 10;
 				break;
 		case 60:	// option menu
 				optionsSetup(1);

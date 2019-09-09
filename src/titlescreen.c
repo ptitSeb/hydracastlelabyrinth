@@ -137,5 +137,6 @@ void titleScreenDraw()
 	PHL_DrawTextBold("LOAD GAME", 248, 304, YELLOW);
 	PHL_DrawTextBold("OPTIONS", 264, 336, YELLOW);
 	PHL_DrawTextBold("EXIT", 288, 368, YELLOW);
-	PHL_DrawTextBold("(C) 2011 E.HASHIMOTO", 160, 400, WHITE);
+	PHL_DrawTextBold("(C) 2011 E.HASHIMOTO", 160, 410, WHITE);
+	PHL_DrawTextBold("(C) 2017-19 PTITSEB", 160, 442, WHITE);
 }

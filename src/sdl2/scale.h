@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 void xbrz_scale(void* src, void* dst, int width, int height, int scale);
+void dumb_scale(void* src, void* dst, int width, int height, int scale);
 
 #ifdef __cplusplus
 }

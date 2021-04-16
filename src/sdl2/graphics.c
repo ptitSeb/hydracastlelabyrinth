@@ -37,6 +37,8 @@ static const int FPS = 70;
 
 static uint32_t tframe;
 
+float ratio = 1.3333333; // Aspect ratio for 320x240, for SDL2 HW scaling.
+
 extern void Input_InitJoystick();
 extern void Input_CloseJoystick();
 
@@ -69,7 +71,8 @@ void PHL_GraphicsInit()
 
 	Input_InitJoystick();
     
-    uint32_t flags = 0;
+    	uint32_t flags = 0;
+
 	if(wantFullscreen || desktopFS)
     	flags |= (desktopFS)?SDL_WINDOW_FULLSCREEN_DESKTOP:SDL_WINDOW_FULLSCREEN;
 	window = SDL_CreateWindow("HCL", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, (desktopFS)?0:screenW, (desktopFS)?0:screenH, flags);
@@ -85,24 +88,45 @@ void PHL_GraphicsInit()
 		SDL_DestroyWindow(window);
 		exit(-2);
 	}
-	if(desktopFS)
-	{
-		SDL_GetRendererOutputSize(renderer, &screenW, &screenH);
-		if(screenW/320 < screenH/240)
-			screenScale = screenW/320;
-		else
-			screenScale = screenH/240; // automatic guess the scale
-		deltaX = (screenW-320*screenScale)/2;
-		deltaY = (screenH-240*screenScale)/2;
-	}
-	actualW = 320*screenScale;
-	actualH = 240*screenScale;
 
-	screen = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_TARGET, actualW, actualH);
+	if (!xbrz) {
+		// Scale using SDL2 renderer, NOT in software.
+
+		screenScale = 1;
+
+		SDL_GetRendererOutputSize(renderer, &screenW, &screenH);
+
+		actualH = screenH;
+		actualW = screenH * ratio;
+
+		deltaX = (screenW-actualW)/2;
+		deltaY = 0;
+
+	        screen = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_TARGET, 320, 240);
+	        backbuffer = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_TARGET, 320, 240);
+	}
+	else {
+		// Scale in software so XBRZ scaling can be done.
+
+		if(desktopFS)
+		{
+			SDL_GetRendererOutputSize(renderer, &screenW, &screenH);
+			if(screenW/320 < screenH/240)
+				screenScale = screenW/320;
+			else
+				screenScale = screenH/240; // automatic guess the scale
+			deltaX = (screenW-320*screenScale)/2;
+			deltaY = (screenH-240*screenScale)/2;
+		}
+		actualW = 320*screenScale;
+		actualH = 240*screenScale;
+
+		screen = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_TARGET, actualW, actualH);
+		backbuffer = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_TARGET, actualW, actualH);
+	}
+
 	drawbuffer = screen;
 	drawscreen = 1;
-
-	backbuffer = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_TARGET, actualW, actualH);
 	tframe = SDL_GetTicks();
 }
 

@@ -379,10 +379,10 @@ void musictypeLoad(char* first, char* second)
 	#ifdef _SDL
 	if (strcmp(first, "music_type") == 0) {
 		if (strcmp(second, "ogg") == 0) {
-			setXBRZ(1);
+			setMusicType(1);
 		}
 		if (strcmp(second, "midi") == 0) {
-			setXBRZ(0);
+			setMusicType(0);
 		}
 	}
 	#endif

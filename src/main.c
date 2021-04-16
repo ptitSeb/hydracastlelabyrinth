@@ -146,13 +146,6 @@ int main(int argc, char **argv)
 		screenH = infos->current_h;
 		screenW = infos->current_w;
 		#endif
-		if(screenW/320 < screenH/240)
-			screenScale = screenW/320;
-		else
-			screenScale = screenH/240; // automatic guess the scale
-		deltaX = (screenW-320*screenScale)/2;
-		deltaY = (screenH-240*screenScale)/2;
-
 	} else {
 		screenW = 320 * screenScale;
 		screenH = 240 * screenScale;

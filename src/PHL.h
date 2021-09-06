@@ -46,9 +46,7 @@ typedef struct {
 void PHL_Init();
 void PHL_Deinit();
 
-int WHITE,
-	RED,
-	YELLOW;
+extern int WHITE, RED, YELLOW;
 
 PHL_Surface PHL_LoadQDA(char* fname);
 void PHL_DrawTextBold(char* txt, int dx, int dy, int col);

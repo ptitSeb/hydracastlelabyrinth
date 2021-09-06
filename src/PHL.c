@@ -4,6 +4,8 @@
 #include "qda.h"
 #include "game.h"
 
+int WHITE, RED, YELLOW;
+
 void PHL_Init()
 {	
 	PHL_GraphicsInit();

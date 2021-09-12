@@ -8,7 +8,7 @@ typedef struct {
 	unsigned char* fileName[256];
 } QDAHeader;
 
-QDAHeader headers[29]; //names, offsets, and sizes of each sheet
+extern QDAHeader headers[29]; //names, offsets, and sizes of each sheet
 int initQDA();
 
 #endif

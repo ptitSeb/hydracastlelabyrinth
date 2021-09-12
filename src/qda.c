@@ -6,6 +6,7 @@
 #include "amigaos.h"
 #endif
 
+QDAHeader headers[29];
 //Load headers for each image
 //Returns: 0 = file not found | 1 = success | 2 = Invalid file
 int initQDA()

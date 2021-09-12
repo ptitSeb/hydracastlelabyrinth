@@ -19,6 +19,14 @@ const char QUAKE = 9;
 
 int state;
 
+double herox, heroy;
+double herohp, maxhp;
+int heroAmmo, maxAmmo;
+int heroWeapon;
+
+Mask heroMask;
+Mask shieldMask;
+
 void updateMask();
 void heroChangeScreen(int dx, int dy);
 

@@ -57,63 +57,63 @@
 #define CHN_ENEMIES 4
 #define CHN_EFFECTS 5
 
-Door* lastDoor;
+extern Door* lastDoor;
 
-int secretTimer;
-int levelStartTimer;
-int saveTimer;
+extern int secretTimer;
+extern int levelStartTimer;
+extern int saveTimer;
 
-int quakeTimer;
+extern int quakeTimer;
 
-int bellFlag;
-int bossFlag;
-int bossDefeatedFlag;
+extern int bellFlag;
+extern int bossFlag;
+extern int bossDefeatedFlag;
 
-char roomDarkness;
+extern char roomDarkness;
 
 //Used for item get message
-int itemGotX;
-int itemGotY;
+extern int itemGotX;
+extern int itemGotY;
 
-int roomSecret;
+extern int roomSecret;
 
-int collisionTiles[16][12];
+extern int collisionTiles[16][12];
 
 //Playtime in frames. At 60 frames per second can hold ~828 1/2 days worth of playtime if my math isn't shit
-unsigned long playTime;
+extern unsigned long playTime;
 
 //Inventory
-unsigned char hasWeapon[5];
-unsigned char hasItem[28];
-unsigned char hasKey[8];
+extern unsigned char hasWeapon[5];
+extern unsigned char hasItem[28];
+extern unsigned char hasKey[8];
 
 //Save data flags
-unsigned char flags[60];
+extern unsigned char flags[60];
 
-PHL_Background background,
+extern PHL_Background background,
 			   foreground;
 
 //Game assets
-PHL_Surface images[15];
-PHL_Music 	bgmMusic;
-PHL_Music	bgmSecret;
-PHL_Music	bgmGameover;
-PHL_Sound	sounds[43];
+extern PHL_Surface images[15];
+extern PHL_Music 	bgmMusic;
+extern PHL_Music	bgmSecret;
+extern PHL_Music	bgmGameover;
+extern PHL_Sound	sounds[43];
 
 #define MAX_WEAPONS 5
-Weapon* weapons[MAX_WEAPONS];
+extern Weapon* weapons[MAX_WEAPONS];
 
 #define MAX_OBJECTS 40
-Object* objects[MAX_OBJECTS];
+extern Object* objects[MAX_OBJECTS];
 
 #define MAX_ENEMIES 20
-Enemy* enemies[MAX_ENEMIES];
+extern Enemy* enemies[MAX_ENEMIES];
 
 #define MAX_EFFECTS 30
-Effect* effects[MAX_EFFECTS];
+extern Effect* effects[MAX_EFFECTS];
 
 #define MAX_PLATFORMS 10
-Platform* platforms[MAX_PLATFORMS];
+extern Platform* platforms[MAX_PLATFORMS];
 
 //Graphic names
 #define imgTiles 0

@@ -4,7 +4,7 @@
 #define JAPANESE 0
 #define ENGLISH 1
 
-char gameLanguage;
+extern char gameLanguage;
 
 typedef struct {
 	unsigned char x[32];
@@ -12,12 +12,12 @@ typedef struct {
 	char length;
 } Message;
 
-Message* saving;
-Message* saveError[3];
-Message* itemName[41];
-Message* found;
-Message* itemDescription[28];
-Message* dungeon[8];
+extern Message* saving;
+extern Message* saveError[3];
+extern Message* itemName[41];
+extern Message* found;
+extern Message* itemDescription[28];
+extern Message* dungeon[8];
 
 void textInit();
 void textFree();

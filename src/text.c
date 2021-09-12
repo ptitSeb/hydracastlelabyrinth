@@ -5,6 +5,14 @@
 #include "PHL.h"
 #include "game.h"
 
+char gameLanguage;
+Message* saving;
+Message* saveError[3];
+Message* itemName[41];
+Message* found;
+Message* itemDescription[28];
+Message* dungeon[8];
+
 void loadMessage(Message* m, FILE* f);
 void trimMessage(Message* m);
 

@@ -4,13 +4,13 @@
 #include "PHL.h"
 #include "collision.h"
 
-double herox, heroy;
-double herohp, maxhp;
-int heroAmmo, maxAmmo;
-int heroWeapon;
+extern double herox, heroy;
+extern double herohp, maxhp;
+extern int heroAmmo, maxAmmo;
+extern int heroWeapon;
 
-Mask heroMask;
-Mask shieldMask;
+extern Mask heroMask;
+extern Mask shieldMask;
 
 void heroSetup();
 void heroCleanup();

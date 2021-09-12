@@ -55,7 +55,39 @@ char musicStrings[9][14] = { "midi/main01",
 							 "midi/main04",							 
 							 "midi/main06" };
 							
+int collisionTiles[16][12];
+PHL_Surface images[15];
+PHL_Sound	sounds[43];
+PHL_Music 	bgmMusic;
+PHL_Music	bgmSecret;
+PHL_Music	bgmGameover;
+Object* objects[MAX_OBJECTS];
+Effect* effects[MAX_EFFECTS];
+Weapon* weapons[MAX_WEAPONS];
+Enemy* enemies[MAX_ENEMIES];
+Platform* platforms[MAX_PLATFORMS];
 
+int secretTimer;
+unsigned long playTime;
+
+Door* lastDoor;
+int quakeTimer;
+int bellFlag;
+int bossFlag;
+int bossDefeatedFlag;
+int roomSecret;
+char roomDarkness;
+
+int itemGotX;
+int itemGotY;
+
+PHL_Background background, foreground;
+
+unsigned char hasWeapon[5];
+unsigned char hasItem[28];
+unsigned char hasKey[8];
+
+unsigned char flags[60];
 
 double cutInTimer = 240;
 int transitionTimer = 0;

@@ -160,8 +160,8 @@ void Input_ControlButtonEvent(SDL_Event* evt) {
 	switch(evt->cbutton.button)
 	{
 		case SDL_CONTROLLER_BUTTON_A:	jFaceDown = w; break;
-		case SDL_CONTROLLER_BUTTON_B: 	jFaceLeft = w; break;
-		case SDL_CONTROLLER_BUTTON_X: 	jFaceRight = w; break;
+		case SDL_CONTROLLER_BUTTON_B: 	jFaceRight = w; break;
+		case SDL_CONTROLLER_BUTTON_X: 	jFaceLeft = w; break;
 		case SDL_CONTROLLER_BUTTON_Y: 	jFaceUp = w; break;
 		case SDL_CONTROLLER_BUTTON_LEFTSHOULDER: jL = w; break;
 		case SDL_CONTROLLER_BUTTON_RIGHTSHOULDER: jR = w; break;

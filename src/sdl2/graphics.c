@@ -81,7 +81,7 @@ void PHL_GraphicsInit()
 		printf("Error creating SDL Window (%s)\n", SDL_GetError());
 		exit(-1);
 	}
-	renderer = SDL_CreateRenderer(window, 0, SDL_RENDERER_TARGETTEXTURE | SDL_RENDERER_ACCELERATED);
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_TARGETTEXTURE | SDL_RENDERER_ACCELERATED);
 	if(!renderer)
 	{
 		printf("Error creating SDL Renderer (%s)\n", SDL_GetError());

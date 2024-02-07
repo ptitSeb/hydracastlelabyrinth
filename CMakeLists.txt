@@ -1,4 +1,12 @@
 cmake_minimum_required(VERSION 2.8)
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+set(CMAKE_INSTALL_BINDIR ".")
+set(CMAKE_INSTALL_LIBDIR ".")
+set(CMAKE_INSTALL_DATADIR ".")
+include(GNUInstallDirs)
 
 option(BITTBOY "Set to ON if targeting a Bittboy device" ${BITTBOY})
 option(GAMESHELL "Set to ON if targeting a GameShell device" ${GAMESHELL})
@@ -187,6 +195,7 @@ if(NOT EMSCRIPTEN)
 endif()
 
 add_executable(hcl ${HCL_SOURCE_FILES} ${HCL_SDL_FILES})
+set_target_properties(hcl PROPERTIES OUTPUT_NAME "hcl")
 target_link_libraries (hcl ${EXTRA_LIBS} m)
 if(EMSCRIPTEN)
 	#set(CMAKE_EXECUTABLE_SUFFIX ".html")
@@ -200,3 +209,23 @@ if(EMSCRIPTEN)
 	#target_link_libraries(hcl "--preload-file" "data")
 	set_target_properties(hcl PROPERTIES OUTPUT_NAME "${CMAKE_SOURCE_DIR}/docs/index.html")
 endif(EMSCRIPTEN)
+
+# Main binary
+install(TARGETS hcl
+	RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+	BUNDLE  DESTINATION "${CMAKE_INSTALL_BINDIR}"
+)
+
+# Support data
+install(DIRECTORY
+	"${CMAKE_CURRENT_SOURCE_DIR}/data"
+ 	DESTINATION "${CMAKE_INSTALL_DATADIR}"
+        FILE_PERMISSIONS
+          OWNER_READ OWNER_WRITE
+          GROUP_READ
+          WORLD_READ
+        DIRECTORY_PERMISSIONS
+          OWNER_READ OWNER_EXECUTE OWNER_WRITE
+          GROUP_READ GROUP_EXECUTE GROUP_WRITE
+          WORLD_READ WORLD_EXECUTE
+	)

@@ -3,6 +3,10 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+set(CMAKE_INSTALL_BINDIR ".")
+set(CMAKE_INSTALL_LIBDIR ".")
+set(CMAKE_INSTALL_DATADIR ".")
+
 option(BITTBOY "Set to ON if targeting a Bittboy device" ${BITTBOY})
 option(GAMESHELL "Set to ON if targeting a GameShell device" ${GAMESHELL})
 option(PANDORA "Set to ON if targeting an OpenPandora device" ${PANDORA})
@@ -206,14 +210,14 @@ endif(EMSCRIPTEN)
 
 # Main binary
 install(TARGETS hcl
-	RUNTIME DESTINATION "."
-	BUNDLE  DESTINATION "."
+	RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+	BUNDLE  DESTINATION "${CMAKE_INSTALL_BINDIR}"
 )
 
 # Support data
 install(DIRECTORY
 	"${CMAKE_CURRENT_SOURCE_DIR}/data"
- 	DESTINATION "."
+ 	DESTINATION "${CMAKE_INSTALL_DATADIR}"
         FILE_PERMISSIONS
           OWNER_READ OWNER_WRITE
           GROUP_READ

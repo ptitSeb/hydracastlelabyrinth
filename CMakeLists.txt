@@ -1,4 +1,14 @@
 cmake_minimum_required(VERSION 2.8)
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+set(CMAKE_INSTALL_BINDIR ".")
+set(CMAKE_INSTALL_LIBDIR ".")
+set(CMAKE_INSTALL_DATADIR ".")
+
+add_executable(hcl)
+set_target_properties(tfe PROPERTIES OUTPUT_NAME "hcl")
 
 option(BITTBOY "Set to ON if targeting a Bittboy device" ${BITTBOY})
 option(GAMESHELL "Set to ON if targeting a GameShell device" ${GAMESHELL})
@@ -200,3 +210,9 @@ if(EMSCRIPTEN)
 	#target_link_libraries(hcl "--preload-file" "data")
 	set_target_properties(hcl PROPERTIES OUTPUT_NAME "${CMAKE_SOURCE_DIR}/docs/index.html")
 endif(EMSCRIPTEN)
+
+# Main binary
+install(TARGETS hcl
+	RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+	BUNDLE  DESTINATION "${CMAKE_INSTALL_BINDIR}"
+)

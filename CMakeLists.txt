@@ -200,3 +200,15 @@ if(EMSCRIPTEN)
 	#target_link_libraries(hcl "--preload-file" "data")
 	set_target_properties(hcl PROPERTIES OUTPUT_NAME "${CMAKE_SOURCE_DIR}/docs/index.html")
 endif(EMSCRIPTEN)
+
+
+if(LINUX)
+	install(
+ 		FILES "${CMAKE_CURRENT_SOURCE_DIR}/io.github.ptitSeb.hydracastlelabyrinth.desktop" DESTINATION "share/applications"
+	)
+	install(
+		FILES "${CMAKE_CURRENT_SOURCE_DIR}/io.github.ptitSeb.hydracastlelabyrinth.png" DESTINATION "share/icons/hicolor/256x256/apps"
+	)
+	install(
+ 		FILES "${CMAKE_CURRENT_SOURCE_DIR}/io.github.ptitSeb.hydracastlelabyrinth.appdata.xml" DESTINATION "share/appdata"
+endif()

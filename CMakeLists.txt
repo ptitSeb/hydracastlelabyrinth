@@ -3,13 +3,6 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-set(CMAKE_INSTALL_BINDIR ".")
-set(CMAKE_INSTALL_LIBDIR ".")
-set(CMAKE_INSTALL_DATADIR ".")
-
-add_executable(hcl)
-set_target_properties(tfe PROPERTIES OUTPUT_NAME "hcl")
-
 option(BITTBOY "Set to ON if targeting a Bittboy device" ${BITTBOY})
 option(GAMESHELL "Set to ON if targeting a GameShell device" ${GAMESHELL})
 option(PANDORA "Set to ON if targeting an OpenPandora device" ${PANDORA})
@@ -213,6 +206,20 @@ endif(EMSCRIPTEN)
 
 # Main binary
 install(TARGETS hcl
-	RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
-	BUNDLE  DESTINATION "${CMAKE_INSTALL_BINDIR}"
+	RUNTIME DESTINATION "."
+	BUNDLE  DESTINATION "."
 )
+
+# Support data
+install(DIRECTORY
+	"${CMAKE_CURRENT_SOURCE_DIR}/data"
+ 	DESTINATION "."
+        FILE_PERMISSIONS
+          OWNER_READ OWNER_WRITE
+          GROUP_READ
+          WORLD_READ
+        DIRECTORY_PERMISSIONS
+          OWNER_READ OWNER_EXECUTE OWNER_WRITE
+          GROUP_READ GROUP_EXECUTE GROUP_WRITE
+          WORLD_READ WORLD_EXECUTE
+	)

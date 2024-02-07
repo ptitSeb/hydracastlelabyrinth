@@ -240,4 +240,5 @@ if(LINUX)
 	)
 	install(
  		FILES "${CMAKE_CURRENT_SOURCE_DIR}/io.github.ptitSeb.hydracastlelabyrinth.appdata.xml" DESTINATION "share/appdata"
+   	)
 endif()

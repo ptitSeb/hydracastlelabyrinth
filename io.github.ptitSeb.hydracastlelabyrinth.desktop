@@ -1,0 +1,9 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Name=Hydra Castle Labyrinth
+Comment=A modern Linux port of Hydra Castle Labyrinth.
+Exec=hcl
+Icon=io.github.ptitSeb.hydracastlelabyrinth
+Terminal=false
+Type=Application
+Categories=Game;

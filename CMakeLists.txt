@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -229,3 +229,15 @@ install(DIRECTORY
           GROUP_READ GROUP_EXECUTE GROUP_WRITE
           WORLD_READ WORLD_EXECUTE
 	)
+
+# Icon and shortcut
+if(LINUX)
+	install(
+ 		FILES "${CMAKE_CURRENT_SOURCE_DIR}/io.github.ptitSeb.hydracastlelabyrinth.desktop" DESTINATION "share/applications"
+	)
+	install(
+		FILES "${CMAKE_CURRENT_SOURCE_DIR}/io.github.ptitSeb.hydracastlelabyrinth.png" DESTINATION "share/icons/hicolor/256x256/apps"
+	)
+	install(
+ 		FILES "${CMAKE_CURRENT_SOURCE_DIR}/io.github.ptitSeb.hydracastlelabyrinth.appdata.xml" DESTINATION "share/appdata"
+endif()

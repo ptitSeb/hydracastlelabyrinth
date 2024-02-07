@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
 
 option(BITTBOY "Set to ON if targeting a Bittboy device" ${BITTBOY})
 option(GAMESHELL "Set to ON if targeting a GameShell device" ${GAMESHELL})

@@ -41,7 +41,8 @@ void Input_InitJoystick()
 		} else {
 			joy1 = SDL_JoystickOpen(0);
 			SDL_JoystickEventState(SDL_ENABLE);
-			printf("Using %s\n", SDL_JoystickName(0));
+			const char *name = SDL_JoystickName(joy1);
+			printf("Using joystick %s\n", name?name:"with no name");
 		}
 	} else {
 		joy1 = NULL;

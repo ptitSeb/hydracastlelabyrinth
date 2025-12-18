@@ -102,6 +102,7 @@ jobs:
           "$PWD/usr/bin/hcl" $@
           EOF
           chmod +x AppRun
+          cp -r ../../data .
           cd ../appimagetool
           ./appimagetool-*.AppImage ../AppDir ../hcl-${{ matrix.platform }}.AppImage
 

@@ -57,17 +57,17 @@ jobs:
         if: matrix.platform == 'ARM64'
         run: |
           cd build
-          git clone https://github.com/AppImage/appimagetool.git
-          cd appimagetool
-          ARCH="aarch64" ./ci/build-in-docker.sh
+          wget https://github.com/AppImage/appimagetool/releases/download/1.9.0/appimagetool-aarch64.AppImage
+          mv appimagetool-aarch64.AppImage appimagetool.AppImage
+          chmod +x appimagetool.AppImage
 
       - name: "Preparing X64 AppImage"
         if: matrix.platform == 'X64'
         run: |
           cd build
-          git clone https://github.com/AppImage/appimagetool.git
-          cd appimagetool
-          ARCH="x86_64" ./ci/build-in-docker.sh
+          wget https://github.com/AppImage/appimagetool/releases/download/1.9.0/appimagetool-x86_64.AppImage
+          mv appimagetool-x86_64.AppImage appimagetool.AppImage
+          chmod +x appimagetool.AppImage
 
       - name: "Creating AppImage"
         if: matrix.platform == 'X64' || matrix.platform == 'ARM64'
@@ -101,8 +101,8 @@ jobs:
           "$PWD/usr/bin/hcl" $@'> AppRun
           chmod +x AppRun
           cp -r ../../data .
-          cd ../appimagetool
-          ./appimagetool-*.AppImage ../AppDir ../hcl-${{ matrix.platform }}.AppImage
+          cd ..
+          ./appimagetool.AppImage AppDir ../hcl-${{ matrix.platform }}.AppImage
 
 
       - name: "Upload Zip File"

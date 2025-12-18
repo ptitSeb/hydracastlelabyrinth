@@ -96,11 +96,9 @@ jobs:
           Categories=Game;
           EOF
           cp hcl.desktop usr/share/applications/
-          cat <<EOF > AppRun
-          #! /usr/bin/env bash
+          echo '#! /usr/bin/env bash
           PWD="$(readlink -f "$(dirname "$0")")"
-          "$PWD/usr/bin/hcl" $@
-          EOF
+          "$PWD/usr/bin/hcl" $@'> AppRun
           chmod +x AppRun
           cp -r ../../data .
           cd ../appimagetool

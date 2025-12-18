@@ -38,7 +38,7 @@ jobs:
       - name: "Environment preparation"
         run: |
             sudo apt-get update
-            sudo apt-get -y install git cmake make python3 libsdl2-dev libsdl2-mixer-dev
+            sudo apt-get -y install git cmake make python3 libsdl2-dev libsdl2-mixer-dev desktop-file-utils
 
       - name: "Build"
         run: |
@@ -57,8 +57,6 @@ jobs:
         if: matrix.platform == 'ARM64'
         run: |
           cd build
-          git clone https://github.com/AppImage/appimagetool.git
-          cd appimagetool
           wget https://github.com/AppImage/appimagetool/releases/download/1.9.0/appimagetool-aarch64.AppImage
           mv appimagetool-aarch64.AppImage appimagetool.AppImage
           chmod +x appimagetool.AppImage
@@ -67,8 +65,6 @@ jobs:
         if: matrix.platform == 'X64'
         run: |
           cd build
-          git clone https://github.com/AppImage/appimagetool.git
-          cd appimagetool
           wget https://github.com/AppImage/appimagetool/releases/download/1.9.0/appimagetool-x86_64.AppImage
           mv appimagetool-x86_64.AppImage appimagetool.AppImage
           chmod +x appimagetool.AppImage
@@ -106,8 +102,8 @@ jobs:
           usr/bin/hcl $@'> AppRun
           chmod +x AppRun
           cp -r ../../data .
-          cd ../appimagetool
-          ./appimagetool.AppImage ../AppDir ../hcl-${{ matrix.platform }}.AppImage
+          cd ..
+          ./appimagetool.AppImage AppDir hcl-${{ matrix.platform }}.AppImage
 
 
       - name: "Upload Zip File"

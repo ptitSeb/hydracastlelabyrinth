@@ -51,10 +51,10 @@ jobs:
         run: |
           cd build
           cp -r ../data .
-          7z -tzip -mx=5 a hcl.zip data hcl
+          7z -tzip -mx=5 a hcl-${{ matrix.platform }}.zip data hcl
 
       - name: "Upload Zip File"
         uses: actions/upload-artifact@v4
         with:
           name: hcl-${{ matrix.type }}.zip
-          path: build/hcl.zip
+          path: build/hcl-${{ matrix.platform }}.zip

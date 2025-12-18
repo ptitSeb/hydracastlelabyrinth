@@ -1,0 +1,60 @@
+### Auto build Box64 and release its binary with Github Action
+name: Build and Release HydraCastleLabyrinth
+
+permissions:
+  actions: 'write'
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+defaults:
+  run:
+    # needed on container images which could default to sh
+    shell: bash
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [X64, ARM64]
+        include:
+          - platform: X64
+            os: ubuntu-latest
+
+          - platform: ARM64
+            os: ubuntu-22.04-arm
+
+    runs-on: ${{ matrix.os }}
+    container:
+      image: ${{ matrix.image || '' }}
+    steps:
+      - name: "Checkout Repository"
+        uses: actions/checkout@v4
+
+      - name: "Environment preparation"
+        run: |
+            sudo apt-get update
+            sudo apt-get -y install git cmake make python3 libsdl2-dev libsdl2-mixer-dev
+
+      - name: "Build"
+        run: |
+          mkdir build
+          cd build
+          cmake .. -DUSE_SDL2=ON
+          make -j$(nproc) VERBOSE=1
+
+      - name: "Packaging Zip file"
+        run: |
+          cd build
+          cp -r ../data .
+          7z -tzip -mx=5 a hcl.zip data hcl
+
+      - name: "Upload Zip File"
+        uses: actions/upload-artifact@v4
+        with:
+          name: hcl-${{ matrix.type }}.zip
+          path: build/hcl.zip

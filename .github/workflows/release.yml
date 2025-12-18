@@ -98,11 +98,12 @@ jobs:
           cp hcl.desktop usr/share/applications/
           echo '#! /usr/bin/env bash
           PWD="$(readlink -f "$(dirname "$0")")"
-          "$PWD/usr/bin/hcl" $@'> AppRun
+          cd "$PWD"
+          usr/bin/hcl $@'> AppRun
           chmod +x AppRun
           cp -r ../../data .
           cd ..
-          ./appimagetool.AppImage AppDir ../hcl-${{ matrix.platform }}.AppImage
+          ./appimagetool.AppImage AppDir hcl-${{ matrix.platform }}.AppImage
 
 
       - name: "Upload Zip File"

@@ -103,7 +103,7 @@ jobs:
           EOF
           chmod +x AppRun
           cd ../appimagetool
-          ./appimagetool-*.AppImage ../build/AppDir ../hcl-${{ matrix.platform }}.AppImage
+          ./appimagetool-*.AppImage ../AppDir ../hcl-${{ matrix.platform }}.AppImage
 
 
       - name: "Upload Zip File"

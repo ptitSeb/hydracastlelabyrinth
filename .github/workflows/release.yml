@@ -53,8 +53,68 @@ jobs:
           cp -r ../data .
           7z -tzip -mx=5 a hcl-${{ matrix.platform }} data hcl
 
+      - name: "Preparing Arm64 AppImage"
+        if: matrix.platform == 'ARM64'
+        run: |
+          cd build
+          git clone https://github.com/AppImage/appimagetool.git
+          cd appimagetool
+          ARCH="aarch64" ./ci/build-in-docker.sh
+
+      - name: "Preparing X64 AppImage"
+        if: matrix.platform == 'X64'
+        run: |
+          cd build
+          git clone https://github.com/AppImage/appimagetool.git
+          cd appimagetool
+          ARCH="x86_64" ./ci/build-in-docker.sh
+
+      - name: "Creating AppImage"
+        if: matrix.platform == 'X64' || matrix.platform == 'ARM64'
+        run: |
+          cd build
+          mkdir AppDir
+          cd AppDir
+          mkdir usr
+          mkdir usr/bin
+          mkdir usr/lib
+          mkdir -p usr/share/applications
+          mkdir -p usr/share/icons/hicolor/256x256
+          mkdir -p usr/share/icons/hicolor/48x48
+          cp ../hcl usr/bin/
+          cp ../../io.github.ptitSeb.hydracastlelabyrinth.png hcl.png
+          cp ../../io.github.ptitSeb.hydracastlelabyrinth.png usr/share/icons/hicolor/256x256/hcl.png
+          cp ../../icon.png usr/share/icons/hicolor/48x48/hcl.png
+          cat <<EOF > hcl.desktop
+          [Desktop Entry]
+          Name=Hydra Castle Labyrinth
+          Comment=A modern Linux port of Hydra Castle Labyrinth.
+          Exec=hcl
+          Icon=hcl
+          Terminal=false
+          Type=Application
+          Categories=Game;
+          EOF
+          cp hcl.desktop usr/share/applications/
+          cat <<EOF > AppRun
+          #! /usr/bin/env bash
+          PWD="$(readlink -f "$(dirname "$0")")"
+          "$PWD/usr/bin/hcl" $@
+          EOF
+          chmod +x AppRun
+          cd ../appimagetool
+          ./appimagetool-*.AppImage ../build/AppDir ../hcl-${{ matrix.platform }}.AppImage
+
+
       - name: "Upload Zip File"
         uses: actions/upload-artifact@v4
         with:
           name: hcl-${{ matrix.platform }}.zip
           path: build/hcl-${{ matrix.platform }}.zip
+
+      - name: "Upload AppImage"
+        if: matrix.platform == 'X64' || matrix.platform == 'ARM64'
+        uses: actions/upload-artifact@v4
+        with:
+          name: hcl-${{ matrix.platform }}.AppImage
+          path: build/hcl-${{ matrix.platform }}.AppImage

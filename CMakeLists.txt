@@ -18,6 +18,7 @@ option(USE_CCACHE "Set to ON to use ccache if present in the system" ${USE_CCACH
 option(EMSCRIPTEN "Set to ON to build using EMSCRIPTEN" ${EMSCRIPTEN})
 
 option(USE_SDL2 "Use SDL2 instead of SDL1.2" ${USE_SDL2})
+option(USE_SDL3 "Use SDL3 instead of SDL1.2" ${USE_SDL3})
 
 if(CMAKE_C_COMPILER EQUAL "emcc")
 	set(EMSCRIPTEN ON)
@@ -47,6 +48,10 @@ if(EMSCRIPTEN)
 	if(NOT USE_SDL2)
 		set(USE_SDL2 ON CACHE BOOL ON FORCE)
 	endif()
+	if(USE_SDL3)
+		set(USE_SDL3 OFF CACHE BOOL OFF FORCE)
+		message(WARNING "SDL3 is not supported for the Emscripten target, falling back to SDL2")
+	endif()
 	set(SDL2_LIBRARIES SDL2)
 else(EMSCRIPTEN)
 
@@ -69,7 +74,14 @@ if(ODROID)
 	add_definitions(-DODROID)
 endif()
 
-if(USE_SDL2)
+if(USE_SDL3)
+	add_definitions(-D_SDL -D_SDL3)
+	find_package(SDL3 REQUIRED)
+	find_package(SDL3_mixer REQUIRED)
+
+	INCLUDE_DIRECTORIES(${SDL3_INCLUDE_DIRS})
+	INCLUDE_DIRECTORIES(${SDL3_mixer_INCLUDE_DIRS})
+elseif(USE_SDL2)
 	add_definitions(-D_SDL -D_SDL2)
 	find_package(SDL2 REQUIRED)
 	#find_package(SDL2_mixer REQUIRED)
@@ -157,7 +169,16 @@ set(HCL_SOURCE_FILES
 	src/enemies/waterjumper.c
 	src/enemies/wizard.c
 )
-if(USE_SDL2)
+if(USE_SDL3)
+	set(HCL_SDL_FILES
+		src/sdl3/audio.c
+		src/sdl3/input.c
+		src/sdl3/graphics.c
+		src/sdl3/system.c
+		src/xBRZ/xbrz.cpp
+		src/sdl3/scale.cpp
+	)
+elseif(USE_SDL2)
 	set(HCL_SDL_FILES
 		src/sdl2/audio.c
 		src/sdl2/input.c
@@ -185,7 +206,10 @@ if(PANDORA)
 endif(PANDORA)
 
 if(NOT EMSCRIPTEN)
-	if(USE_SDL2)
+	if(USE_SDL3)
+		set (EXTRA_LIBS ${EXTRA_LIBS} SDL3::SDL3)
+		set (EXTRA_LIBS ${EXTRA_LIBS} SDL3_mixer::SDL3_mixer)
+	elseif(USE_SDL2)
 		set (EXTRA_LIBS ${EXTRA_LIBS} ${SDL2_LIBRARIES})
 		set (EXTRA_LIBS ${EXTRA_LIBS} SDL2_mixer)
 	else()

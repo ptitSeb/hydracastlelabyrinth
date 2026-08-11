@@ -4,10 +4,10 @@
 
 This version of Hydra Castle Labyrinth is based on the 3DS port (see below for original notice)
 
-This version use SDL (either 1.2 or 2.0) and build on Linux, OpenPandora, PocketCHIP and ODROID.
+This version use SDL (either 1.2, 2.0 or 3.0) and build on Linux, OpenPandora, PocketCHIP and ODROID.
 
-You'll need SDL and SDL_mixer to build, either version 1.2 or 2.0.
-The SDL2 version use SDL Renderer and so is hardware accelerated.
+You'll need SDL and SDL_mixer to build, either version 1.2, 2.0 or 3.0.
+The SDL2/SDL3 versions use SDL Renderer and so are hardware accelerated.
 The SDL1.2 version use plain bitmap (no OpenGL or GLES needed).
 
 On Debian and friend, to prepare and build, you can do (if you never build anything before, start with `sudo apt install build-essential git`):
@@ -27,6 +27,15 @@ cd ~
 git clone https://github.com/ptitSeb/hydracastlelabyrinth.git
 cd hydracastlelabyrinth
 cmake . -DUSE_SDL2=ON
+make
+```
+For SDL3.0
+```
+sudo apt install libsdl3-dev libsdl3-mixer-dev cmake
+cd ~
+git clone https://github.com/ptitSeb/hydracastlelabyrinth.git
+cd hydracastlelabyrinth
+cmake . -DUSE_SDL3=ON
 make
 ```
 

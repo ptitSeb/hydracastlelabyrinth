@@ -136,7 +136,13 @@ int main(int argc, char **argv)
 	}
 	if(desktopFS)
 	{
-		#ifdef _SDL2
+		#ifdef _SDL3
+		const SDL_DisplayMode* infos = SDL_GetDesktopDisplayMode(0);
+		if(infos) {
+			screenW = infos->w;
+			screenH = infos->h;
+		}
+		#elif defined(_SDL2)
 		SDL_DisplayMode infos;
 		SDL_GetCurrentDisplayMode(0, &infos);
 		screenW = infos.w;
